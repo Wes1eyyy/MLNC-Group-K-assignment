@@ -1,0 +1,131 @@
+% Results and Evaluation Section
+
+%% Development Plan for Results:
+
+%% 1. Overview (1 paragraph)
+%%    - Summary of evaluation approach
+%%    - Best model identified
+%%    - Preview of key results
+
+%% 2. Model Performance (subsection)
+%%    2.1 Overall Performance
+%%        - Final model accuracy on test set
+%%        - Comparison with baseline
+%%        - Comparison with cross-validation results
+%%        - Statistical significance tests if applicable
+%%    
+%%    2.2 Per-Class Performance
+%%        - Precision, Recall, F1-score for each class (H/D/A)
+%%        - Which outcomes are easiest/hardest to predict?
+%%        - Classification report table
+%%    
+%%    2.3 Confusion Matrix Analysis
+%%        - Detailed confusion matrix
+%%        - Common misclassification patterns
+%%        - Analysis: Are draws often confused with wins?
+%%        - Error rate per class
+
+%% 3. Feature Importance (subsection)
+%%    3.1 Most Important Features
+%%        - Top 10-15 features by importance
+%%        - Bar chart of feature importance
+%%        - Interpretation of important features
+%%    
+%%    3.2 Surprising Findings
+%%        - Unexpected important/unimportant features
+%%        - Domain knowledge validation
+%%    
+%%    3.3 Feature Categories
+%%        - Which category matters most? (form vs stats vs h2h)
+
+%% 4. Model Interpretation (subsection)
+%%    4.1 SHAP Analysis
+%%        - SHAP summary plot
+%%        - Global feature importance
+%%        - Feature interactions
+%%        - Example: how does recent form affect predictions?
+%%    
+%%    4.2 Individual Predictions
+%%        - SHAP force plots for sample predictions
+%%        - Example correct predictions
+%%        - Example incorrect predictions
+%%        - What drives each prediction?
+
+%% 5. Error Analysis (subsection)
+%%    5.1 Misclassification Patterns
+%%        - Which teams are hardest to predict?
+%%        - Temporal patterns in errors
+%%        - Feature values in misclassified cases
+%%    
+%%    5.2 Insights
+%%        - Why does model fail in certain cases?
+%%        - Limitations identified
+%%        - Inherent unpredictability in sports
+
+%% 6. Prediction Confidence (subsection)
+%%    6.1 Probability Distribution
+%%        - Distribution of prediction probabilities
+%%        - High vs low confidence predictions
+%%    
+%%    6.2 Calibration
+%%        - Calibration curve
+%%        - Are predicted probabilities reliable?
+%%    
+%%    6.3 Confidence vs Accuracy
+%%        - Accuracy stratified by confidence level
+%%        - Can we trust high-confidence predictions?
+
+%% 7. Comparison with Literature (subsection, optional)
+%%    - How do results compare with similar studies?
+%%    - State-of-the-art performance benchmarks
+%%    - Our contribution and improvements
+
+%% 8. Test Set Predictions (subsection)
+%%    - Final predictions on test dataset
+%%    - Prediction confidence for test matches
+%%    - Submission file created
+
+%% Expected Length: 3-4 pages
+
+%% Key Points:
+%% - Present results clearly with tables and figures
+%% - Include multiple perspectives (overall, per-class, feature-based)
+%% - Be honest about limitations and errors
+%% - Connect results to domain knowledge
+%% - Use visualizations effectively
+
+%% Example Structure:
+% \section{Results and Evaluation}
+%
+% \subsection{Model Performance}
+% TODO: Present overall and per-class metrics
+%
+% \begin{table}[h]
+% \centering
+% \caption{Classification Results on Test Set}
+% TODO: Add classification report table
+% \end{table}
+%
+% \subsection{Confusion Matrix}
+% TODO: Display and analyze confusion matrix
+%
+% \begin{figure}[h]
+% \centering
+% % \includegraphics[width=0.6\textwidth]{../figures/model_performance/confusion_matrix_best_model.png}
+% \caption{Confusion matrix for best model}
+% \end{figure}
+%
+% \subsection{Feature Importance}
+% TODO: Present feature importance analysis
+%
+% \begin{figure}[h]
+% \centering
+% % \includegraphics[width=0.8\textwidth]{../figures/model_performance/feature_importance_final.png}
+% \caption{Top 15 most important features}
+% \end{figure}
+%
+% \subsection{SHAP Analysis}
+% TODO: Interpret model using SHAP values
+%
+% \subsection{Error Analysis}
+% TODO: Analyze misclassifications

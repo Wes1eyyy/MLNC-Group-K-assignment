@@ -1,0 +1,80 @@
+% Methodology Section
+
+%% Development Plan for Methodology:
+
+%% 1. Overview (1 paragraph)
+%%    - High-level description of approach
+%%    - Pipeline: data preprocessing → feature engineering → model training → evaluation
+%%    - Emphasize systematic and rigorous methodology
+
+%% 2. Data Collection and Preprocessing (subsection)
+%%    2.1 Dataset Description
+%%        - Detailed description of EPL dataset
+%%        - Features available: Date, Teams, Goals, Shots, Fouls, Cards, etc.
+%%        - Time period: 2000-2024
+%%        - Total number of matches
+%%        - Class distribution (H/D/A)
+%%    
+%%    2.2 Data Quality Assessment
+%%        - Missing value analysis
+%%        - Outlier detection
+%%        - Data validation checks
+%%        - Consistency verification
+%%    
+%%    2.3 Data Cleaning
+%%        - How missing values were handled
+%%        - Outlier treatment
+%%        - Date parsing and formatting
+%%        - Feature type conversions
+
+%% 3. Exploratory Data Analysis (subsection)
+%%    - Summary statistics
+%%    - Distribution of match outcomes
+%%    - Home advantage analysis
+%%    - Temporal trends
+%%    - Feature correlations
+%%    - Key insights from EDA
+%%    - Include 2-3 key figures
+
+%% 4. Train-Test Split Strategy (subsection)
+%%    - Temporal split approach (not random)
+%%    - Rationale: avoid data leakage, realistic evaluation
+%%    - Split ratio and dates
+%%    - Cross-validation strategy
+
+%% 5. Evaluation Metrics (subsection)
+%%    - Accuracy: overall correctness
+%%    - Precision, Recall, F1-score: per-class performance
+%%    - Confusion matrix: detailed error analysis
+%%    - Log loss: probability calibration
+%%    - Why these metrics are appropriate
+%%    - Baseline comparison
+
+%% Expected Length: 2-3 pages
+
+%% Key Points:
+%% - Be specific about preprocessing steps
+%% - Justify methodological choices
+%% - Include equations for metrics if needed
+%% - Reference figures and tables
+%% - Maintain scientific rigor
+
+%% Example Structure:
+% \section{Data and Methodology}
+%
+% \subsection{Dataset Description}
+% TODO: Describe dataset in detail
+%
+% \subsection{Data Preprocessing}
+% TODO: Explain cleaning and preprocessing steps
+%
+% \subsection{Exploratory Data Analysis}
+% TODO: Present key EDA findings with figures
+%
+% \subsection{Train-Test Split}
+% TODO: Explain temporal split strategy
+%
+% \subsection{Evaluation Metrics}
+% TODO: Define metrics with equations
+% Accuracy: $\frac{TP + TN}{TP + TN + FP + FN}$
+% F1-score: $2 \times \frac{Precision \times Recall}{Precision + Recall}$
