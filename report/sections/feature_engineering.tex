@@ -1,0 +1,117 @@
+% Feature Engineering Section
+
+%% Development Plan for Feature Engineering:
+
+%% 1. Overview (1 paragraph)
+%%    - Importance of feature engineering in sports prediction
+%%    - Goal: capture team performance, form, and match context
+%%    - Overview of feature categories created
+
+%% 2. Team Performance Features (subsection)
+%%    2.1 Historical Statistics
+%%        - Overall win/loss/draw rates
+%%        - Home and away performance separately
+%%        - Average goals scored and conceded
+%%        - Shot statistics (total, on target, accuracy)
+%%        - Discipline metrics (fouls, yellow/red cards)
+%%        - Corner kicks
+%%    
+%%    2.2 Rationale
+%%        - Why these features matter
+%%        - Expected predictive power
+
+%% 3. Form-Based Features (subsection)
+%%    3.1 Rolling Window Statistics
+%%        - Recent form (last 5, 10 matches)
+%%        - Rolling averages: goals, points, wins
+%%        - Trend indicators (improving vs declining)
+%%    
+%%    3.2 Implementation Details
+%%        - Window sizes chosen
+%%        - How to handle early matches (insufficient history)
+%%        - Avoiding data leakage
+%%    
+%%    3.3 Rationale
+%%        - Recent form often more predictive than overall statistics
+%%        - Captures momentum and current team state
+
+%% 4. Head-to-Head Features (subsection)
+%%    4.1 Matchup-Specific Statistics
+%%        - Historical performance between two specific teams
+%%        - Win rates in H2H matches
+%%        - Average goals in matchups
+%%        - Last meeting outcome
+%%    
+%%    4.2 Rationale
+%%        - Some teams have favorable/unfavorable matchups
+%%        - Psychological and tactical factors
+
+%% 5. Time-Based Features (subsection)
+%%    5.1 Temporal Variables
+%%        - Season stage (early/mid/late)
+%%        - Month of year
+%%        - Day of week (if relevant)
+%%        - Days since last match (rest/fatigue)
+%%    
+%%    5.2 Rationale
+%%        - Seasonality effects
+%%        - Fixture congestion impact
+
+%% 6. Advanced Features (subsection, optional)
+%%    - Goal difference (cumulative)
+%%    - Attack strength vs defense strength
+%%    - Shot efficiency metrics
+%%    - ELO ratings (if implemented)
+
+%% 7. Feature Selection (subsection)
+%%    7.1 Correlation Analysis
+%%        - Feature correlation with target
+%%        - Multicollinearity detection
+%%        - Redundant feature removal
+%%    
+%%    7.2 Importance-Based Selection
+%%        - Initial feature importance from tree models
+%%        - Selected feature subset
+%%    
+%%    7.3 Final Feature Set
+%%        - List of features used in final model
+%%        - Justification for inclusion
+
+%% 8. Feature Scaling (subsection)
+%%    - Standardization or normalization approach
+%%    - When and why applied
+%%    - Impact on model performance
+
+%% Expected Length: 2-3 pages
+
+%% Key Points:
+%% - Justify each feature category
+%% - Explain how features avoid data leakage
+%% - Include feature importance visualization
+%% - Be specific about implementation
+%% - Connect features to domain knowledge
+
+%% Example Structure:
+% \section{Feature Engineering}
+%
+% \subsection{Overview}
+% TODO: Introduce feature engineering approach
+%
+% \subsection{Team Performance Features}
+% TODO: Describe historical statistics features
+%
+% \subsection{Form-Based Features}
+% TODO: Explain rolling window features
+%
+% \subsection{Head-to-Head Features}
+% TODO: Describe matchup-specific features
+%
+% \subsection{Feature Selection}
+% TODO: Explain selection process and final feature set
+%
+% % Include table of final features
+% \begin{table}[h]
+% \centering
+% \caption{Final Feature Set}
+% TODO: Add table of features with descriptions
+% \end{table}

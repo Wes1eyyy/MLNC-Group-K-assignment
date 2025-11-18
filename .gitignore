@@ -1,0 +1,116 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Data files (if large)
+# Uncomment if dataset files are too large for git
+# data/raw/*.csv
+# data/processed/*.csv
+
+# Model files (can be large)
+models/*.pkl
+models/*.joblib
+models/*.h5
+models/*.model
+# Keep README.md in models/
+!models/README.md
+
+# Results
+# Uncomment if you want to exclude results from git
+# results/*.csv
+# !results/README.md
+
+# Figures (uncomment if too many or too large)
+# figures/**/*.png
+# figures/**/*.jpg
+# figures/**/*.pdf
+# !figures/README.md
+
+# LaTeX intermediate files
+report/*.aux
+report/*.log
+report/*.out
+report/*.toc
+report/*.bbl
+report/*.blg
+report/*.synctex.gz
+report/*.fls
+report/*.fdb_latexmk
+report/sections/*.aux
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+# Keep specific archives if needed
+!coursework_brief/*.zip
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation builds
+docs/_build/
