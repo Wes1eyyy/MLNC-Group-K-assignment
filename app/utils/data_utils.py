@@ -162,6 +162,8 @@ def calculate_goal_averages(data: List[dict], team: str, reference_date: str) ->
 
     total_goals_scored = 0
     total_goals_conceded = 0
+    total_shots = 0
+    total_shots_conceded = 0
     matches = 0
 
     for match in data:
@@ -184,19 +186,25 @@ def calculate_goal_averages(data: List[dict], team: str, reference_date: str) ->
             matches += 1
             total_goals_scored += int(match['FTAG'])
             total_goals_conceded += int(match['FTHG'])
+            total_shots += int(match['AS'])
+            total_shots_conceded += int(match['HS'])
         elif match_season == target_season and match['HomeTeam'] == team:
             matches += 1
             total_goals_scored += int(match['FTHG'])
             total_goals_conceded += int(match['FTAG'])
+            total_shots += int(match['HS'])
+            total_shots_conceded += int(match['AS'])
 
     # Calculate averages
     if matches == 0:
-        return 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0
 
     avg_goals_scored = total_goals_scored / matches
     avg_goals_conceded = total_goals_conceded / matches
+    avg_shots = total_shots / matches
+    avg_shots_conceded = total_shots_conceded / matches
 
-    return avg_goals_scored, avg_goals_conceded
+    return avg_goals_scored, avg_goals_conceded, avg_shots, avg_shots_conceded
 
 
 def _process_single_match(args):
@@ -218,10 +226,10 @@ def _process_single_match(args):
     a_wins, a_draws, a_losses = count_record_in_season(data, away_team, match_date)
 
     # Get home team's goal averages at home
-    h_goals_scored, h_goals_conceded = calculate_goal_averages(data, home_team, match_date)
+    h_goals_scored, h_goals_conceded, h_shots, h_shots_conceded = calculate_goal_averages(data, home_team, match_date)
 
     # Get away team's goal averages away
-    a_goals_scored, a_goals_conceded = calculate_goal_averages(data, away_team, match_date)
+    a_goals_scored, a_goals_conceded, a_shots, a_shots_conceded = calculate_goal_averages(data, away_team, match_date)
 
     # Create enriched match record
     enriched_match = match.copy()
@@ -230,16 +238,21 @@ def _process_single_match(args):
     enriched_match['HomeTeam_Losses'] = h_losses
     enriched_match['HomeTeam_AvgGoalsScored'] = round(h_goals_scored, 2)
     enriched_match['HomeTeam_AvgGoalsConceded'] = round(h_goals_conceded, 2)
+    enriched_match['HomeTeam_AvgShots'] = round(h_shots, 2)
+    enriched_match['HomeTeam_AvgShotsConceded'] = round(a_shots, 2)
+
     enriched_match['AwayTeam_Wins'] = a_wins
     enriched_match['AwayTeam_Draws'] = a_draws
     enriched_match['AwayTeam_Losses'] = a_losses
     enriched_match['AwayTeam_AvgGoalsScored'] = round(a_goals_scored, 2)
     enriched_match['AwayTeam_AvgGoalsConceded'] = round(a_goals_conceded, 2)
+    enriched_match['AwayTeam_AvgShots'] = round(a_shots, 2)
+    enriched_match['AwayTeam_AvgShotsConceded'] = round(a_shots_conceded, 2)
 
     return enriched_match
 
 
-def add_team_records_to_data(data: List[dict], max_workers: int = 15) -> List[dict]:
+def add_team_records_to_data(data: List[dict], max_workers: int = 20) -> List[dict]:
     """Add home team and away team season records to each match.
 
     For each match, adds the following fields:
