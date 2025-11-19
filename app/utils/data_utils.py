@@ -1,7 +1,7 @@
 from typing import List
 import csv
 from datetime import datetime
-
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 
 
@@ -284,7 +284,47 @@ def calculate_away_goal_averages(data: List[dict], team: str, reference_date: st
     return avg_goals_scored, avg_goals_conceded
 
 
-def add_team_records_to_data(data: List[dict]) -> List[dict]:
+def _process_single_match(args):
+    """Helper function to process a single match. Used for parallel processing."""
+    match, data = args
+
+    # Skip matches with no date
+    if not match.get('Date') or match['Date'].strip() == '':
+        return match
+
+    match_date = match['Date']
+    home_team = match['HomeTeam']
+    away_team = match['AwayTeam']
+
+    # Get home team's record before this match
+    h_wins, h_draws, h_losses = count_overall_record_in_season(data, home_team, match_date)
+
+    # Get away team's record before this match
+    a_wins, a_draws, a_losses = count_overall_record_in_season(data, away_team, match_date)
+
+    # Get home team's goal averages at home
+    h_goals_scored, h_goals_conceded = calculate_home_goal_averages(data, home_team, match_date)
+
+    # Get away team's goal averages away
+    a_goals_scored, a_goals_conceded = calculate_away_goal_averages(data, away_team, match_date)
+
+    # Create enriched match record
+    enriched_match = match.copy()
+    enriched_match['HomeTeam_Wins'] = h_wins
+    enriched_match['HomeTeam_Draws'] = h_draws
+    enriched_match['HomeTeam_Losses'] = h_losses
+    enriched_match['HomeTeam_AvgGoalsScored'] = round(h_goals_scored, 2)
+    enriched_match['HomeTeam_AvgGoalsConceded'] = round(h_goals_conceded, 2)
+    enriched_match['AwayTeam_Wins'] = a_wins
+    enriched_match['AwayTeam_Draws'] = a_draws
+    enriched_match['AwayTeam_Losses'] = a_losses
+    enriched_match['AwayTeam_AvgGoalsScored'] = round(a_goals_scored, 2)
+    enriched_match['AwayTeam_AvgGoalsConceded'] = round(a_goals_conceded, 2)
+
+    return enriched_match
+
+
+def add_team_records_to_data(data: List[dict], max_workers: int = 10) -> List[dict]:
     """Add home team and away team season records to each match.
 
     For each match, adds the following fields:
@@ -301,47 +341,27 @@ def add_team_records_to_data(data: List[dict]) -> List[dict]:
 
     Args:
         data: List of match dictionaries
+        max_workers: Number of threads to use for parallel processing (default: 4)
 
     Returns:
         List of match dictionaries with added team record fields
     """
-    enriched_data = []
+    print(f"Processing {len(data)} matches using {max_workers} threads...")
 
-    for match in tqdm(data):
-        # Skip matches with no date
-        if not match.get('Date') or match['Date'].strip() == '':
-            enriched_data.append(match)
-            continue
+    # Prepare args for parallel processing
+    args_list = [(match, data) for match in data]
 
-        match_date = match['Date']
-        home_team = match['HomeTeam']
-        away_team = match['AwayTeam']
+    # Process in parallel
+    enriched_data = [{}] * len(data)  # Pre-allocate list
 
-        # Get home team's record before this match
-        h_wins, h_draws, h_losses = count_overall_record_in_season(data, home_team, match_date)
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all tasks
+        future_to_index = {executor.submit(_process_single_match, args): i
+                           for i, args in enumerate(args_list)}
 
-        # Get away team's record before this match
-        a_wins, a_draws, a_losses = count_overall_record_in_season(data, away_team, match_date)
-
-        # Get home team's goal averages at home
-        h_goals_scored, h_goals_conceded = calculate_home_goal_averages(data, home_team, match_date)
-
-        # Get away team's goal averages away
-        a_goals_scored, a_goals_conceded = calculate_away_goal_averages(data, away_team, match_date)
-
-        # Create enriched match record
-        enriched_match = match.copy()
-        enriched_match['HomeTeam_Wins'] = h_wins
-        enriched_match['HomeTeam_Draws'] = h_draws
-        enriched_match['HomeTeam_Losses'] = h_losses
-        enriched_match['HomeTeam_AvgGoalsScored'] = round(h_goals_scored, 2)
-        enriched_match['HomeTeam_AvgGoalsConceded'] = round(h_goals_conceded, 2)
-        enriched_match['AwayTeam_Wins'] = a_wins
-        enriched_match['AwayTeam_Draws'] = a_draws
-        enriched_match['AwayTeam_Losses'] = a_losses
-        enriched_match['AwayTeam_AvgGoalsScored'] = round(a_goals_scored, 2)
-        enriched_match['AwayTeam_AvgGoalsConceded'] = round(a_goals_conceded, 2)
-
-        enriched_data.append(enriched_match)
+        # Collect results with progress bar
+        for future in tqdm(as_completed(future_to_index), total=len(data), desc="Processing"):
+            index = future_to_index[future]
+            enriched_data[index] = future.result()
 
     return enriched_data
