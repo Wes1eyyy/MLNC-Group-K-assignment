@@ -164,6 +164,8 @@ def calculate_goal_averages(data: List[dict], team: str, reference_date: str) ->
     total_goals_conceded = 0
     total_shots = 0
     total_shots_conceded = 0
+    total_corners = 0
+    total_corners_conceded = 0
     matches = 0
 
     for match in data:
@@ -188,23 +190,29 @@ def calculate_goal_averages(data: List[dict], team: str, reference_date: str) ->
             total_goals_conceded += int(match['FTHG'])
             total_shots += int(match['AS'])
             total_shots_conceded += int(match['HS'])
+            total_corners += int(match['AC'])
+            total_corners_conceded += int(match['HC'])
         elif match_season == target_season and match['HomeTeam'] == team:
             matches += 1
             total_goals_scored += int(match['FTHG'])
             total_goals_conceded += int(match['FTAG'])
             total_shots += int(match['HS'])
             total_shots_conceded += int(match['AS'])
+            total_corners += int(match['HC'])
+            total_corners_conceded += int(match['AC'])
 
     # Calculate averages
     if matches == 0:
-        return 0.0, 0.0, 0.0, 0.0
+        return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
 
     avg_goals_scored = total_goals_scored / matches
     avg_goals_conceded = total_goals_conceded / matches
     avg_shots = total_shots / matches
     avg_shots_conceded = total_shots_conceded / matches
+    avg_corners = total_corners / matches
+    avg_corners_conceded = total_corners_conceded / matches
 
-    return avg_goals_scored, avg_goals_conceded, avg_shots, avg_shots_conceded
+    return avg_goals_scored, avg_goals_conceded, avg_shots, avg_shots_conceded, avg_corners, avg_corners_conceded
 
 
 def _process_single_match(args):
@@ -226,10 +234,10 @@ def _process_single_match(args):
     a_wins, a_draws, a_losses = count_record_in_season(data, away_team, match_date)
 
     # Get home team's goal averages at home
-    h_goals_scored, h_goals_conceded, h_shots, h_shots_conceded = calculate_goal_averages(data, home_team, match_date)
+    h_goals_scored, h_goals_conceded, h_shots, h_shots_conceded, h_corners, h_corners_concealed = calculate_goal_averages(data, home_team, match_date)
 
     # Get away team's goal averages away
-    a_goals_scored, a_goals_conceded, a_shots, a_shots_conceded = calculate_goal_averages(data, away_team, match_date)
+    a_goals_scored, a_goals_conceded, a_shots, a_shots_conceded, a_corners, a_corners_concealed = calculate_goal_averages(data, away_team, match_date)
 
     # Create enriched match record
     enriched_match = match.copy()
@@ -239,7 +247,9 @@ def _process_single_match(args):
     enriched_match['HomeTeam_AvgGoalsScored'] = round(h_goals_scored, 2)
     enriched_match['HomeTeam_AvgGoalsConceded'] = round(h_goals_conceded, 2)
     enriched_match['HomeTeam_AvgShots'] = round(h_shots, 2)
-    enriched_match['HomeTeam_AvgShotsConceded'] = round(a_shots, 2)
+    enriched_match['HomeTeam_AvgShotsConceded'] = round(h_shots, 2)
+    enriched_match['HomeTeam_AvgCorners'] = round(h_corners, 2)
+    enriched_match['HomeTeam_AvgCornersConceded'] = round(h_corners_concealed, 2)
 
     enriched_match['AwayTeam_Wins'] = a_wins
     enriched_match['AwayTeam_Draws'] = a_draws
@@ -248,6 +258,8 @@ def _process_single_match(args):
     enriched_match['AwayTeam_AvgGoalsConceded'] = round(a_goals_conceded, 2)
     enriched_match['AwayTeam_AvgShots'] = round(a_shots, 2)
     enriched_match['AwayTeam_AvgShotsConceded'] = round(a_shots_conceded, 2)
+    enriched_match['AwayTeam_AvgCorners'] = round(a_corners, 2)
+    enriched_match['AwayTeam_AvgCornersConceded'] = round(a_corners_concealed, 2)
 
     return enriched_match
 
