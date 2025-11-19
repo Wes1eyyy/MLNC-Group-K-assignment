@@ -184,6 +184,106 @@ def count_overall_record_in_season(data: List[dict], team: str, reference_date: 
     return total_wins, total_draws, total_losses
 
 
+def calculate_home_goal_averages(data: List[dict], team: str, reference_date: str) -> tuple:
+    """Calculate average goals scored and conceded at home in the season up to the reference date.
+
+    Args:
+        data: List of match dictionaries
+        team: Team name to check
+        reference_date: Date to determine which season and cutoff date (format: 'DD/MM/YYYY')
+
+    Returns:
+        Tuple of (avg_goals_scored, avg_goals_conceded) at home
+        Returns (0.0, 0.0) if no home matches played yet
+    """
+    target_season = get_season_from_date(reference_date)
+    ref_date = datetime.strptime(reference_date, '%d/%m/%Y')
+
+    total_goals_scored = 0
+    total_goals_conceded = 0
+    home_matches = 0
+
+    for match in data:
+        # Skip matches with no date
+        if not match.get('Date') or match['Date'].strip() == '':
+            continue
+
+        # Parse match date
+        match_date = datetime.strptime(match['Date'], '%d/%m/%Y')
+
+        # Skip matches after reference date
+        if match_date >= ref_date:
+            break
+
+        # Check if this match is in the target season
+        match_season = get_season_from_date(match['Date'])
+
+        # Check if team is home team
+        if match_season == target_season and match['HomeTeam'] == team:
+            home_matches += 1
+            total_goals_scored += int(match['FTHG'])
+            total_goals_conceded += int(match['FTAG'])
+
+    # Calculate averages
+    if home_matches == 0:
+        return 0.0, 0.0
+
+    avg_goals_scored = total_goals_scored / home_matches
+    avg_goals_conceded = total_goals_conceded / home_matches
+
+    return avg_goals_scored, avg_goals_conceded
+
+
+def calculate_away_goal_averages(data: List[dict], team: str, reference_date: str) -> tuple:
+    """Calculate average goals scored and conceded away in the season up to the reference date.
+
+    Args:
+        data: List of match dictionaries
+        team: Team name to check
+        reference_date: Date to determine which season and cutoff date (format: 'DD/MM/YYYY')
+
+    Returns:
+        Tuple of (avg_goals_scored, avg_goals_conceded) away
+        Returns (0.0, 0.0) if no away matches played yet
+    """
+    target_season = get_season_from_date(reference_date)
+    ref_date = datetime.strptime(reference_date, '%d/%m/%Y')
+
+    total_goals_scored = 0
+    total_goals_conceded = 0
+    away_matches = 0
+
+    for match in data:
+        # Skip matches with no date
+        if not match.get('Date') or match['Date'].strip() == '':
+            continue
+
+        # Parse match date
+        match_date = datetime.strptime(match['Date'], '%d/%m/%Y')
+
+        # Skip matches after reference date
+        if match_date >= ref_date:
+            break
+
+        # Check if this match is in the target season
+        match_season = get_season_from_date(match['Date'])
+
+        # Check if team is away team
+        if match_season == target_season and match['AwayTeam'] == team:
+            away_matches += 1
+            total_goals_scored += int(match['FTAG'])
+            total_goals_conceded += int(match['FTHG'])
+
+    # Calculate averages
+    if away_matches == 0:
+        return 0.0, 0.0
+
+    avg_goals_scored = total_goals_scored / away_matches
+    avg_goals_conceded = total_goals_conceded / away_matches
+
+    return avg_goals_scored, avg_goals_conceded
+
+
 def add_team_records_to_data(data: List[dict]) -> List[dict]:
     """Add home team and away team season records to each match.
 
@@ -191,9 +291,13 @@ def add_team_records_to_data(data: List[dict]) -> List[dict]:
     - HomeTeam_Wins: Home team's total wins in season before this match
     - HomeTeam_Draws: Home team's total draws in season before this match
     - HomeTeam_Losses: Home team's total losses in season before this match
+    - HomeTeam_AvgGoalsScored: Home team's average goals scored at home
+    - HomeTeam_AvgGoalsConceded: Home team's average goals conceded at home
     - AwayTeam_Wins: Away team's total wins in season before this match
     - AwayTeam_Draws: Away team's total draws in season before this match
     - AwayTeam_Losses: Away team's total losses in season before this match
+    - AwayTeam_AvgGoalsScored: Away team's average goals scored away
+    - AwayTeam_AvgGoalsConceded: Away team's average goals conceded away
 
     Args:
         data: List of match dictionaries
@@ -219,14 +323,24 @@ def add_team_records_to_data(data: List[dict]) -> List[dict]:
         # Get away team's record before this match
         a_wins, a_draws, a_losses = count_overall_record_in_season(data, away_team, match_date)
 
+        # Get home team's goal averages at home
+        h_goals_scored, h_goals_conceded = calculate_home_goal_averages(data, home_team, match_date)
+
+        # Get away team's goal averages away
+        a_goals_scored, a_goals_conceded = calculate_away_goal_averages(data, away_team, match_date)
+
         # Create enriched match record
         enriched_match = match.copy()
         enriched_match['HomeTeam_Wins'] = h_wins
         enriched_match['HomeTeam_Draws'] = h_draws
         enriched_match['HomeTeam_Losses'] = h_losses
+        enriched_match['HomeTeam_AvgGoalsScored'] = round(h_goals_scored, 2)
+        enriched_match['HomeTeam_AvgGoalsConceded'] = round(h_goals_conceded, 2)
         enriched_match['AwayTeam_Wins'] = a_wins
         enriched_match['AwayTeam_Draws'] = a_draws
         enriched_match['AwayTeam_Losses'] = a_losses
+        enriched_match['AwayTeam_AvgGoalsScored'] = round(a_goals_scored, 2)
+        enriched_match['AwayTeam_AvgGoalsConceded'] = round(a_goals_conceded, 2)
 
         enriched_data.append(enriched_match)
 
