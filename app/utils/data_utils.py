@@ -66,49 +66,8 @@ def get_season_from_date(date_str: str) -> str:
     return f"{season_start}-{str(season_end)[-2:]}"
 
 
-def count_home_wins_in_season(data: List[dict], team: str, reference_date: str) -> int:
-    """Count how many home games a team has won in the current season up to the reference date.
-
-    Args:
-        data: List of match dictionaries
-        team: Team name to check
-        reference_date: Date to determine which season and cutoff date (format: 'DD/MM/YYYY' or 'DD Mon YY')
-
-    Returns:
-        Number of home wins in the season before or on the reference date
-    """
-    target_season = get_season_from_date(reference_date)
-
-    # Parse reference date for comparison
-    ref_date = datetime.strptime(reference_date, '%d/%m/%Y')
-
-    home_wins = 0
-
-    for match in data:
-        # Skip matches with no date
-        if not match.get('Date') or match['Date'].strip() == '':
-            continue
-        # Parse match date
-        match_date = datetime.strptime(match['Date'], '%d/%m/%Y')
-
-        # Skip matches after reference date
-        if match_date > ref_date:
-            break
-
-        # Check if this match is in the target season
-        match_season = get_season_from_date(match['Date'])
-
-        # Check if team is home team and won
-        if (match_season == target_season and
-                match['HomeTeam'] == team and
-                match['FTR'] == 'H'):
-            home_wins += 1
-
-    return home_wins
-
-
-def count_home_losses_in_season(data: List[dict], team: str, reference_date: str) -> int:
-    """Count how many home games a team has lost in the current season up to the reference date.
+def count_home_record_in_season(data: List[dict], team: str, reference_date: str) -> tuple:
+    """Count home wins, draws, and losses for a team in the current season up to the reference date.
 
     Args:
         data: List of match dictionaries
@@ -116,13 +75,15 @@ def count_home_losses_in_season(data: List[dict], team: str, reference_date: str
         reference_date: Date to determine which season and cutoff date (format: 'DD/MM/YYYY')
 
     Returns:
-        Number of home losses in the season before or on the reference date
+        Tuple of (wins, draws, losses) in the season before or on the reference date
     """
     target_season = get_season_from_date(reference_date)
 
     # Parse reference date for comparison
     ref_date = datetime.strptime(reference_date, '%d/%m/%Y')
 
+    home_wins = 0
+    home_draws = 0
     home_losses = 0
 
     for match in data:
@@ -139,10 +100,59 @@ def count_home_losses_in_season(data: List[dict], team: str, reference_date: str
         # Check if this match is in the target season
         match_season = get_season_from_date(match['Date'])
 
-        # Check if team is home team and lost (FTR == 'A' means away team won)
-        if (match_season == target_season and
-                match['HomeTeam'] == team and
-                match['FTR'] == 'A'):
-            home_losses += 1
+        # Check if team is home team
+        if match_season == target_season and match['HomeTeam'] == team:
+            if match['FTR'] == 'H':
+                home_wins += 1
+            elif match['FTR'] == 'D':
+                home_draws += 1
+            elif match['FTR'] == 'A':
+                home_losses += 1
 
-    return home_losses
+    return home_wins, home_draws, home_losses
+
+
+def count_away_record_in_season(data: List[dict], team: str, reference_date: str) -> tuple:
+    """Count away wins, draws, and losses for a team in the current season up to the reference date.
+
+    Args:
+        data: List of match dictionaries
+        team: Team name to check
+        reference_date: Date to determine which season and cutoff date (format: 'DD/MM/YYYY')
+
+    Returns:
+        Tuple of (wins, draws, losses) in the season before or on the reference date
+    """
+    target_season = get_season_from_date(reference_date)
+
+    # Parse reference date for comparison
+    ref_date = datetime.strptime(reference_date, '%d/%m/%Y')
+
+    away_wins = 0
+    away_draws = 0
+    away_losses = 0
+
+    for match in data:
+        # Skip matches with no date
+        if not match.get('Date') or match['Date'].strip() == '':
+            continue
+        # Parse match date
+        match_date = datetime.strptime(match['Date'], '%d/%m/%Y')
+
+        # Skip matches after reference date
+        if match_date > ref_date:
+            break
+
+        # Check if this match is in the target season
+        match_season = get_season_from_date(match['Date'])
+
+        # Check if team is away team
+        if match_season == target_season and match['AwayTeam'] == team:
+            if match['FTR'] == 'A':  # Away team won
+                away_wins += 1
+            elif match['FTR'] == 'D':  # Draw
+                away_draws += 1
+            elif match['FTR'] == 'H':  # Home team won (away loss)
+                away_losses += 1
+
+    return away_wins, away_draws, away_losses
