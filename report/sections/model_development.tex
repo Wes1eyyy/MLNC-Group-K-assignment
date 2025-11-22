@@ -1,0 +1,155 @@
+% Model Development Section
+
+%% Development Plan for Model Development:
+
+%% 1. Overview (1 paragraph)
+%%    - Model selection strategy
+%%    - Range of algorithms considered
+%%    - Hyperparameter tuning approach
+%%    - Goal: find best performing model
+
+%% 2. Baseline Model (subsection)
+%%    2.1 Description
+%%        - Simple baseline: most frequent class predictor
+%%        - Or: home advantage baseline (always predict H)
+%%    
+%%    2.2 Performance
+%%        - Baseline accuracy and metrics
+%%        - Importance of beating baseline
+%%    
+%%    2.3 Rationale
+%%        - Establish minimum performance threshold
+%%        - Validate that ML models add value
+
+%% 3. Logistic Regression (subsection)
+%%    3.1 Model Description
+%%        - Multinomial logistic regression
+%%        - Linear decision boundaries
+%%        - Interpretable coefficients
+%%    
+%%    3.2 Hyperparameters
+%%        - Regularization parameter (C)
+%%        - Regularization type (L1, L2)
+%%        - Solver choice
+%%    
+%%    3.3 Training Process
+%%        - Cross-validation approach
+%%        - Grid search for hyperparameters
+%%        - Best parameters found
+%%    
+%%    3.4 Advantages/Disadvantages
+%%        - Pros: fast, interpretable, good baseline
+%%        - Cons: assumes linear relationships
+
+%% 4. Random Forest (subsection)
+%%    4.1 Model Description
+%%        - Ensemble of decision trees
+%%        - Bootstrap aggregating
+%%        - Feature randomization
+%%    
+%%    4.2 Hyperparameters Tuned
+%%        - n_estimators: number of trees
+%%        - max_depth: tree depth
+%%        - min_samples_split
+%%        - max_features
+%%    
+%%    4.3 Training Process
+%%        - Randomized search for efficiency
+%%        - Cross-validation results
+%%        - Best parameters
+%%    
+%%    4.4 Advantages/Disadvantages
+%%        - Pros: handles non-linear relationships, robust
+%%        - Cons: less interpretable, can overfit
+
+%% 5. XGBoost (subsection)
+%%    5.1 Model Description
+%%        - Gradient boosting framework
+%%        - Sequential tree building
+%%        - Regularization techniques
+%%    
+%%    5.2 Hyperparameters Tuned
+%%        - learning_rate
+%%        - max_depth
+%%        - n_estimators
+%%        - subsample
+%%        - colsample_bytree
+%%    
+%%    5.3 Training Process
+%%        - Early stopping to prevent overfitting
+%%        - Cross-validation strategy
+%%        - Optimal parameters
+%%    
+%%    5.4 Advantages/Disadvantages
+%%        - Pros: high performance, handles missing values
+%%        - Cons: sensitive to hyperparameters, slower training
+
+%% 6. Other Models (subsection, if implemented)
+%%    - LightGBM
+%%    - Support Vector Machines
+%%    - Neural Networks
+%%    Brief description and results for each
+
+%% 7. Model Comparison (subsection)
+%%    7.1 Cross-Validation Results
+%%        - Table comparing all models
+%%        - Metrics: accuracy, F1-score, log loss
+%%        - Mean and standard deviation
+%%    
+%%    7.2 Model Selection
+%%        - Justification for best model choice
+%%        - Consideration of performance vs complexity
+%%        - Computational efficiency
+%%    
+%%    7.3 Final Model
+%%        - Selected model and parameters
+%%        - Retraining on full training set
+
+%% 8. Implementation Details (subsection)
+%%    - Software and libraries used (Python, scikit-learn, XGBoost)
+%%    - Random seed for reproducibility
+%%    - Computational resources
+%%    - Training time comparisons
+
+%% Expected Length: 3-4 pages
+
+%% Key Points:
+%% - Describe each model clearly but concisely
+%% - Focus on hyperparameter tuning process
+%% - Include comparison table
+%% - Justify model selection
+%% - Reference machine learning theory where appropriate
+
+%% Example Structure:
+% \section{Model Development}
+%
+% \subsection{Baseline Model}
+% TODO: Describe baseline and performance
+%
+% \subsection{Logistic Regression}
+% TODO: Model description, tuning, results
+%
+% \subsection{Random Forest}
+% TODO: Model description, tuning, results
+%
+% \subsection{XGBoost}
+% TODO: Model description, tuning, results
+%
+% \subsection{Model Comparison}
+% TODO: Compare all models with table
+%
+% \begin{table}[h]
+% \centering
+% \caption{Model Performance Comparison}
+% TODO: Add comparison table
+% \begin{tabular}{lcccc}
+% \toprule
+% Model & Accuracy & F1-Score & Log Loss & Training Time \\
+% \midrule
+% Baseline & - & - & - & - \\
+% Logistic Regression & - & - & - & - \\
+% Random Forest & - & - & - & - \\
+% XGBoost & - & - & - & - \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
