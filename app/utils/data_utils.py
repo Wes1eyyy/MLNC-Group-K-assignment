@@ -2,6 +2,8 @@ from typing import List
 import csv
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+import numpy as np
 from tqdm import tqdm
 
 
@@ -238,10 +240,12 @@ def _process_single_match(args):
     a_wins, a_draws, a_losses = count_record_in_season(data, away_team, match_date)
 
     # Get home team's goal averages at home
-    h_goals_scored, h_goals_conceded, h_shots, h_shots_conceded, h_corners, h_corners_concealed, h_fouls = calculate_goal_averages(data, home_team, match_date)
+    h_goals_scored, h_goals_conceded, h_shots, h_shots_conceded, h_corners, h_corners_concealed, h_fouls = calculate_goal_averages(
+        data, home_team, match_date)
 
     # Get away team's goal averages away
-    a_goals_scored, a_goals_conceded, a_shots, a_shots_conceded, a_corners, a_corners_concealed, a_fouls = calculate_goal_averages(data, away_team, match_date)
+    a_goals_scored, a_goals_conceded, a_shots, a_shots_conceded, a_corners, a_corners_concealed, a_fouls = calculate_goal_averages(
+        data, away_team, match_date)
 
     # Create enriched match record
     enriched_match = match.copy()
@@ -352,14 +356,60 @@ def temporal_train_test_split(data: List[dict], test_size: float = 0.1) -> tuple
     test_start = testing_data[0]['Date']
     test_end = testing_data[-1]['Date']
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Temporal Train-Test Split")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
     print(f"Total matches: {len(data)}")
-    print(f"\nTraining set: {len(training_data)} matches ({len(training_data)/len(data)*100:.1f}%)")
+    print(f"\nTraining set: {len(training_data)} matches ({len(training_data) / len(data) * 100:.1f}%)")
     print(f"  Date range: {train_start} to {train_end}")
-    print(f"\nTesting set: {len(testing_data)} matches ({len(testing_data)/len(data)*100:.1f}%)")
+    print(f"\nTesting set: {len(testing_data)} matches ({len(testing_data) / len(data) * 100:.1f}%)")
     print(f"  Date range: {test_start} to {test_end}")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
     return training_data, testing_data
+
+
+def prepare_features(data):
+    """
+    Extract features and labels from data
+
+    Args:
+        data: List of match dictionaries
+
+    Returns:
+        X (numpy array): Feature matrix
+        y (numpy array): Labels
+        feature_cols (list): List of feature column names
+    """
+    # Define feature columns
+    feature_cols = [
+        'HomeTeam_Wins', 'HomeTeam_Draws', 'HomeTeam_Losses',
+        'HomeTeam_AvgGoalsScored', 'HomeTeam_AvgGoalsConceded',
+        'HomeTeam_AvgShots', 'HomeTeam_AvgShotsConceded',
+        'HomeTeam_AvgCorners', 'HomeTeam_AvgCornersConceded',
+        'HomeTeam_AvgFouls',
+        'AwayTeam_Wins', 'AwayTeam_Draws', 'AwayTeam_Losses',
+        'AwayTeam_AvgGoalsScored', 'AwayTeam_AvgGoalsConceded',
+        'AwayTeam_AvgShots', 'AwayTeam_AvgShotsConceded',
+        'AwayTeam_AvgCorners', 'AwayTeam_AvgCornersConceded',
+        'AwayTeam_AvgFouls'
+    ]
+
+    # Extract features
+    X = []
+    y = []
+
+    count = 0
+    for match in data:
+        # Extract feature values
+        features = []
+        for col in feature_cols:
+            value = match[col]
+            # Convert to float
+            features.append(float(value))
+
+        X.append(features)
+        y.append(match['FTR'])  # Target: H, D, A
+        count += 1
+
+    return np.array(X), np.array(y), feature_cols
