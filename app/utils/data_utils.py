@@ -311,3 +311,55 @@ def add_team_records_to_data(data: List[dict], max_workers: int = 20) -> List[di
             enriched_data[index] = future.result()
 
     return enriched_data
+
+
+def temporal_train_test_split(data: List[dict], test_size: float = 0.1) -> tuple:
+    """Split data into training and testing sets using temporal ordering.
+
+    IMPORTANT: Uses temporal split (time-ordered) to prevent data leakage.
+    The last test_size portion of matches chronologically becomes the test set.
+
+    Args:
+        data: List of match dictionaries (must contain 'Date' field)
+        test_size: Proportion of data to use for testing (default: 0.2 = 20%)
+
+    Returns:
+        Tuple of (training_data, testing_data)
+
+    Raises:
+        ValueError: If test_size is not between 0 and 1
+        ValueError: If data is empty or missing Date field
+    """
+    if not 0 < test_size < 1:
+        raise ValueError(f"test_size must be between 0 and 1, got {test_size}")
+
+    if not data:
+        raise ValueError("Data is empty")
+
+    if 'Date' not in data[0]:
+        raise ValueError("Data must contain 'Date' field")
+
+    # Calculate split index
+    split_idx = int(len(data) * (1 - test_size))
+
+    # Split data
+    training_data = data[:split_idx]
+    testing_data = data[split_idx:]
+
+    # Print split information
+    train_start = training_data[0]['Date']
+    train_end = training_data[-1]['Date']
+    test_start = testing_data[0]['Date']
+    test_end = testing_data[-1]['Date']
+
+    print(f"\n{'='*60}")
+    print(f"Temporal Train-Test Split")
+    print(f"{'='*60}")
+    print(f"Total matches: {len(data)}")
+    print(f"\nTraining set: {len(training_data)} matches ({len(training_data)/len(data)*100:.1f}%)")
+    print(f"  Date range: {train_start} to {train_end}")
+    print(f"\nTesting set: {len(testing_data)} matches ({len(testing_data)/len(data)*100:.1f}%)")
+    print(f"  Date range: {test_start} to {test_end}")
+    print(f"{'='*60}\n")
+
+    return training_data, testing_data
