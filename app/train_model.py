@@ -7,6 +7,7 @@
          python train_model.py --model bayes
          python train_model.py --model decision_tree
          python train_model.py --model mlp
+         python train_model.py --model logistic_regression
 """
 import sys
 import os
@@ -17,6 +18,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 import xgboost as xgb
 
@@ -395,12 +397,71 @@ def train_mlp(X_train, y_train):
     return model, scaler
 
 
+def train_logistic_regression(X_train, y_train):
+    """
+    Train Logistic Regression model
+
+    Logistic Regression is a linear classification model that uses the logistic
+    function (sigmoid) to model probabilities. For multi-class problems, it uses
+    multinomial logistic regression (softmax). This implementation:
+    - Uses L2 regularization (Ridge) to prevent overfitting
+    - Scales features for better convergence
+    - Handles class imbalance with class weights
+    - Uses multinomial loss for multi-class classification
+
+    Args:
+        X_train: Training features
+        y_train: Training labels
+
+    Returns:
+        model: Trained Logistic Regression model
+        scaler: Fitted StandardScaler
+    """
+    print("\nTraining Logistic Regression model...")
+    print(f"Training samples: {len(X_train)}")
+    print(f"Feature dimensions: {X_train.shape[1]}")
+
+    # Scale features (important for Logistic Regression convergence!)
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+
+    # Train Logistic Regression
+    model = LogisticRegression(
+        multi_class='multinomial',    # Use multinomial logistic regression (softmax)
+        solver='lbfgs',                # L-BFGS optimizer (good for small datasets)
+        C=1.0,                         # Inverse regularization strength (smaller = more regularization)
+        max_iter=1000,                 # Maximum iterations for convergence
+        class_weight='balanced',       # Handle class imbalance
+        random_state=42,
+        verbose=1
+    )
+
+    model.fit(X_train_scaled, y_train)
+
+    # Display convergence info
+    print(f"\nLogistic Regression training info:")
+    print(f"  Number of iterations: {model.n_iter_[0]}")
+    print(f"  Classes: {model.classes_}")
+
+    # Display feature coefficients magnitude (top features by absolute coefficient)
+    print(f"\nTop 5 features by coefficient magnitude:")
+    coef_abs = np.abs(model.coef_).mean(axis=0)  # Average across classes
+    top_indices = np.argsort(coef_abs)[::-1][:5]
+    for i, idx in enumerate(top_indices, 1):
+        print(f"  {i}. Feature {idx}: {coef_abs[idx]:.4f}")
+
+    print("Training completed!")
+
+    return model, scaler
+
+
 def main():
     """Main training pipeline"""
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Train EPL match outcome prediction model')
     parser.add_argument('--model', type=str, default='svm',
-                        choices=['svm', 'random_forest', 'knn', 'xgboost', 'bayes', 'decision_tree', 'mlp'],
+                        choices=['svm', 'random_forest', 'knn', 'xgboost', 'bayes', 'decision_tree', 'mlp',
+                                 'logistic_regression'],
                         help='Model type to train (default: svm)')
     args = parser.parse_args()
 
@@ -472,6 +533,10 @@ def main():
         model, scaler = train_mlp(X_train, y_train)
         model_path = os.path.join(MODELS_DIR, 'mlp_model.pkl')
         scaler_path = os.path.join(MODELS_DIR, 'mlp_scaler.pkl')
+    elif model_type == 'logistic_regression':
+        model, scaler = train_logistic_regression(X_train, y_train)
+        model_path = os.path.join(MODELS_DIR, 'logistic_regression_model.pkl')
+        scaler_path = os.path.join(MODELS_DIR, 'logistic_regression_scaler.pkl')
     else:
         raise ValueError(f"Unsupported model type: {model_type}")
 
