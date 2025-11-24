@@ -2,6 +2,10 @@
 通用模型训练脚本 - 支持多种算法
 使用方法: python train_model.py --model svm
          python train_model.py --model random_forest
+         python train_model.py --model knn
+         python train_model.py --model xgboost
+         python train_model.py --model bayes
+         python train_model.py --model decision_tree
 """
 import sys
 import os
@@ -10,6 +14,8 @@ import argparse
 from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import StandardScaler
 import xgboost as xgb
 
@@ -185,12 +191,98 @@ def train_xgboost(X_train, y_train):
     return model, None  # XGBoost doesn't need scaler
 
 
+def train_bayes(X_train, y_train):
+    """
+    Train Gaussian Naive Bayes model
+
+    Gaussian Naive Bayes assumes features follow a Gaussian (normal) distribution
+    and are conditionally independent given the class. It's particularly efficient
+    for high-dimensional data and works well with continuous features.
+
+    Args:
+        X_train: Training features
+        y_train: Training labels
+
+    Returns:
+        model: Trained Gaussian Naive Bayes model
+        scaler: None (Naive Bayes is probability-based, doesn't require scaling)
+    """
+    print("\nTraining Gaussian Naive Bayes model...")
+    print(f"Training samples: {len(X_train)}")
+    print(f"Feature dimensions: {X_train.shape[1]}")
+
+    # Train Gaussian Naive Bayes
+    # Note: GaussianNB doesn't have as many hyperparameters as other models
+    model = GaussianNB(
+        var_smoothing=1e-9  # Portion of largest variance added to variances for stability
+    )
+
+    model.fit(X_train, y_train)
+
+    # Display class priors learned by the model
+    print("\nClass priors learned by the model:")
+    class_labels = model.classes_
+    class_priors = model.class_prior_
+    for label, prior in zip(class_labels, class_priors):
+        print(f"  {label}: {prior:.4f} ({prior * 100:.2f}%)")
+
+    print("Training completed!")
+
+    return model, None  # Naive Bayes doesn't need scaler
+
+
+def train_decision_tree(X_train, y_train):
+    """
+    Train Decision Tree model (CART algorithm with entropy criterion)
+
+    Decision trees create a tree-like model of decisions based on feature values.
+    This implementation uses:
+    - Entropy (information gain) as splitting criterion (similar to C4.5/C5.0)
+    - Pruning parameters to prevent overfitting
+    - Class weights to handle imbalanced data
+
+    Args:
+        X_train: Training features
+        y_train: Training labels
+
+    Returns:
+        model: Trained Decision Tree model
+        scaler: None (Decision Tree doesn't need scaling)
+    """
+    print("\nTraining Decision Tree model...")
+    print(f"Training samples: {len(X_train)}")
+    print(f"Feature dimensions: {X_train.shape[1]}")
+
+    # Train Decision Tree with entropy criterion (information gain)
+    model = DecisionTreeClassifier(
+        criterion='entropy',         # Use entropy for information gain (like C4.5/C5.0)
+        max_depth=10,               # Maximum depth to prevent overfitting
+        min_samples_split=20,       # Minimum samples required to split
+        min_samples_leaf=10,        # Minimum samples required at leaf node
+        max_features='sqrt',        # Number of features for best split
+        class_weight='balanced',    # Handle class imbalance
+        random_state=42
+    )
+
+    model.fit(X_train, y_train)
+
+    # Display tree statistics
+    print(f"\nDecision Tree statistics:")
+    print(f"  Tree depth: {model.get_depth()}")
+    print(f"  Number of leaves: {model.get_n_leaves()}")
+    print(f"  Number of features used: {model.n_features_in_}")
+
+    print("Training completed!")
+
+    return model, None  # Decision Tree doesn't need scaler
+
+
 def main():
     """Main training pipeline"""
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Train EPL match outcome prediction model')
     parser.add_argument('--model', type=str, default='svm',
-                        choices=['svm', 'random_forest', 'knn', 'xgboost'],
+                        choices=['svm', 'random_forest', 'knn', 'xgboost', 'bayes', 'decision_tree'],
                         help='Model type to train (default: svm)')
     args = parser.parse_args()
 
@@ -246,6 +338,17 @@ def main():
         scaler_path = None
 
         # Display feature importance for XGBoost
+        display_feature_importance(model, feature_names)
+    elif model_type == 'bayes':
+        model, scaler = train_bayes(X_train, y_train)
+        model_path = os.path.join(MODELS_DIR, 'bayes_model.pkl')
+        scaler_path = None
+    elif model_type == 'decision_tree':
+        model, scaler = train_decision_tree(X_train, y_train)
+        model_path = os.path.join(MODELS_DIR, 'decision_tree_model.pkl')
+        scaler_path = None
+
+        # Display feature importance for Decision Tree
         display_feature_importance(model, feature_names)
     else:
         raise ValueError(f"Unsupported model type: {model_type}")
