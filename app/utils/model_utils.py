@@ -9,14 +9,14 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 
 def evaluate_model(model, X_test, y_test, scaler=None, model_type=None):
     """
-    Evaluate model on test set (works for any sklearn model)
+    Evaluate model on test set (works for sklearn models and Keras models)
 
     Args:
         model: Trained model
         X_test: Test features
         y_test: Test labels
         scaler: Optional scaler (for SVM, neural networks, etc.)
-        model_type: Optional model type ('xgboost', 'svm', etc.)
+        model_type: Optional model type ('xgboost', 'svm', 'mlp', etc.)
 
     Returns:
         accuracy: Test accuracy
@@ -33,13 +33,21 @@ def evaluate_model(model, X_test, y_test, scaler=None, model_type=None):
         X_test_scaled = X_test
 
     # Make predictions
-    y_pred = model.predict(X_test_scaled)
-
+    if model_type == 'mlp':
+        # For Keras models, predict returns probabilities
+        y_pred_proba = model.predict(X_test_scaled, verbose=0)
+        y_pred_numeric = np.argmax(y_pred_proba, axis=1)
+        # Convert numeric predictions back to labels
+        reverse_label_map = {0: 'A', 1: 'D', 2: 'H'}
+        y_pred = np.array([reverse_label_map[pred] for pred in y_pred_numeric])
     # Convert XGBoost numeric predictions back to labels
-    if model_type == 'xgboost':
+    elif model_type == 'xgboost':
         # XGBoost outputs numeric labels (0, 1, 2), convert to ('A', 'D', 'H')
+        y_pred = model.predict(X_test_scaled)
         reverse_label_map = {0: 'A', 1: 'D', 2: 'H'}
         y_pred = np.array([reverse_label_map[pred] for pred in y_pred])
+    else:
+        y_pred = model.predict(X_test_scaled)
 
     # Calculate accuracy
     accuracy = accuracy_score(y_test, y_pred)

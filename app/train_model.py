@@ -6,6 +6,7 @@
          python train_model.py --model xgboost
          python train_model.py --model bayes
          python train_model.py --model decision_tree
+         python train_model.py --model mlp
 """
 import sys
 import os
@@ -18,6 +19,13 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import StandardScaler
 import xgboost as xgb
+
+# Keras/TensorFlow imports for MLP
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.utils import to_categorical
 
 # Add utils directory to path
 sys.path.append(os.path.dirname(__file__))
@@ -277,12 +285,122 @@ def train_decision_tree(X_train, y_train):
     return model, None  # Decision Tree doesn't need scaler
 
 
+def train_mlp(X_train, y_train):
+    """
+    Train Multi-Layer Perceptron (MLP) Neural Network
+
+    MLP is a feedforward neural network that can learn complex non-linear
+    relationships between features. This implementation uses:
+    - Multiple hidden layers with ReLU activation
+    - Dropout for regularization (prevent overfitting)
+    - Batch Normalization for training stability
+    - Early stopping to prevent overfitting
+    - Class weights to handle imbalanced data
+
+    Args:
+        X_train: Training features
+        y_train: Training labels
+
+    Returns:
+        model: Trained MLP model (Keras Sequential)
+        scaler: Fitted StandardScaler
+    """
+
+    print("\nTraining Multi-Layer Perceptron (MLP) model...")
+    print(f"Training samples: {len(X_train)}")
+    print(f"Feature dimensions: {X_train.shape[1]}")
+
+    # 1. Scale features (critical for neural networks!)
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+
+    # 2. Convert labels to numeric and one-hot encoding
+    label_map = {'A': 0, 'D': 1, 'H': 2}
+    y_train_numeric = np.array([label_map[label] for label in y_train])
+    y_train_onehot = to_categorical(y_train_numeric, num_classes=3)
+
+    # 3. Calculate class weights for imbalanced data
+    unique_classes, class_counts = np.unique(y_train_numeric, return_counts=True)
+    total_samples = len(y_train_numeric)
+    class_weights = {cls: total_samples / (len(unique_classes) * count)
+                     for cls, count in zip(unique_classes, class_counts)}
+
+    print(f"\nClass weights for imbalanced data:")
+    for cls, weight in class_weights.items():
+        print(f"  Class {cls} ({list(label_map.keys())[cls]}): {weight:.3f}")
+
+    # 4. Build MLP architecture
+    print("\nBuilding MLP architecture...")
+    model = Sequential([
+        # Input layer + First hidden layer
+        Dense(128, activation='relu', input_shape=(X_train_scaled.shape[1],)),
+        BatchNormalization(),
+        Dropout(0.3),
+
+        # Second hidden layer
+        Dense(64, activation='relu'),
+        BatchNormalization(),
+        Dropout(0.3),
+
+        # Third hidden layer
+        Dense(32, activation='relu'),
+        Dropout(0.2),
+
+        # Output layer (3 classes: A, D, H)
+        Dense(3, activation='softmax')
+    ])
+
+    # 5. Compile model
+    model.compile(
+        optimizer=Adam(learning_rate=0.001),
+        loss='categorical_crossentropy',
+        metrics=['accuracy']
+    )
+
+    print("\nModel Architecture:")
+    model.summary()
+
+    # 6. Setup callbacks
+    early_stop = EarlyStopping(
+        monitor='val_loss',
+        patience=15,
+        restore_best_weights=True,
+        verbose=1
+    )
+
+    # 7. Train model
+    print("\nTraining MLP...")
+    history = model.fit(
+        X_train_scaled, y_train_onehot,
+        validation_split=0.15,  # Use 15% of training data for validation
+        epochs=100,
+        batch_size=32,
+        class_weight=class_weights,
+        callbacks=[early_stop],
+        verbose=1
+    )
+
+    # 8. Display training results
+    final_train_acc = history.history['accuracy'][-1]
+    final_val_acc = history.history['val_accuracy'][-1]
+    print(f"\nTraining completed!")
+    print(f"  Final training accuracy: {final_train_acc:.4f}")
+    print(f"  Final validation accuracy: {final_val_acc:.4f}")
+    print(f"  Total epochs trained: {len(history.history['accuracy'])}")
+
+    # Store label mapping for predictions
+    model.label_map = label_map
+    model.reverse_label_map = {v: k for k, v in label_map.items()}
+
+    return model, scaler
+
+
 def main():
     """Main training pipeline"""
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Train EPL match outcome prediction model')
     parser.add_argument('--model', type=str, default='svm',
-                        choices=['svm', 'random_forest', 'knn', 'xgboost', 'bayes', 'decision_tree'],
+                        choices=['svm', 'random_forest', 'knn', 'xgboost', 'bayes', 'decision_tree', 'mlp'],
                         help='Model type to train (default: svm)')
     args = parser.parse_args()
 
@@ -350,6 +468,10 @@ def main():
 
         # Display feature importance for Decision Tree
         display_feature_importance(model, feature_names)
+    elif model_type == 'mlp':
+        model, scaler = train_mlp(X_train, y_train)
+        model_path = os.path.join(MODELS_DIR, 'mlp_model.pkl')
+        scaler_path = os.path.join(MODELS_DIR, 'mlp_scaler.pkl')
     else:
         raise ValueError(f"Unsupported model type: {model_type}")
 
