@@ -160,6 +160,10 @@ def calculate_season_standings(data: List[dict], season: str) -> dict:
         if match_season != season:
             continue
 
+        # Stop processing if we've moved past the target season
+        if match_season > season:
+            break
+
         home_team = match['HomeTeam']
         away_team = match['AwayTeam']
         result = match['FTR']
