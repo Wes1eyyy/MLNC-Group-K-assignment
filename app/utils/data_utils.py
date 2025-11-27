@@ -287,7 +287,7 @@ def calculate_goal_averages(data: List[dict], team: str, reference_date: str) ->
     return avg_goals_scored, avg_goals_conceded, avg_shots, avg_shots_conceded, avg_corners, avg_corners_conceded, avg_fouls
 
 
-def _process_single_match(args):
+def process_single_match(args):
     """Helper function to process a single match. Used for parallel processing."""
     match, data = args
 
@@ -377,7 +377,7 @@ def add_team_records_to_data(data: List[dict], max_workers: int = 20) -> List[di
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit all tasks
-        future_to_index = {executor.submit(_process_single_match, args): i
+        future_to_index = {executor.submit(process_single_match, args): i
                            for i, args in enumerate(args_list)}
 
         # Collect results with progress bar
