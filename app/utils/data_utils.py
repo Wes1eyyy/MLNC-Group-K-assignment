@@ -70,10 +70,6 @@ def get_season_from_date(date_str: str) -> str:
     Returns:
         Season string in format 'YYYY-YY' (e.g., '2023-24')
     """
-    # Handle empty or None dates
-    if not date_str or date_str.strip() == '':
-        raise ValueError("Date string is empty")
-
     # Parse date
     date = datetime.strptime(date_str, '%d/%m/%Y')
 
@@ -115,9 +111,6 @@ def count_record_in_season(data: List[dict], team: str, reference_date: str) -> 
     losses = 0
 
     for match in data:
-        # Skip matches with no date
-        if not match.get('Date') or match['Date'].strip() == '':
-            continue
         # Parse match date
         match_date = datetime.strptime(match['Date'], '%d/%m/%Y')
 
@@ -147,6 +140,79 @@ def count_record_in_season(data: List[dict], team: str, reference_date: str) -> 
     return wins, draws, losses
 
 
+def calculate_season_standings(data: List[dict], season: str) -> dict:
+    """Calculate final standings for all teams in a given season.
+
+    Points system: Win = 3 points, Draw = 1 point, Loss = 0 points
+
+    Args:
+        data: List of match dictionaries
+        season: Season string (e.g., '2022-23')
+
+    Returns:
+        Dictionary mapping team name to their final ranking (1 = best, 2 = second best, etc.)
+    """
+    team_points = {}
+    for match in data:
+
+        match_season = get_season_from_date(match['Date'])
+
+        if match_season != season:
+            continue
+
+        home_team = match['HomeTeam']
+        away_team = match['AwayTeam']
+        result = match['FTR']
+
+        # Initialize teams if not seen before
+        if home_team not in team_points:
+            team_points[home_team] = 0
+        if away_team not in team_points:
+            team_points[away_team] = 0
+
+        # Award points based on result
+        if result == 'H':  # Home win
+            team_points[home_team] += 3
+        elif result == 'A':  # Away win
+            team_points[away_team] += 3
+        elif result == 'D':  # Draw
+            team_points[home_team] += 1
+            team_points[away_team] += 1
+
+    # Sort teams by points (descending) and assign rankings
+    sorted_teams = sorted(team_points.items(), key=lambda x: x[1], reverse=True)
+
+    team_rankings = {}
+    for rank, (team, points) in enumerate(sorted_teams, 1):
+        team_rankings[team] = rank
+
+    return team_rankings
+
+
+def get_previous_season_ranking(data: List[dict], team: str, current_season: str) -> int:
+    """Get a team's ranking from the previous season.
+
+    Args:
+        data: List of match dictionaries
+        team: Team name
+        current_season: Current season string (e.g., '2023-24')
+
+    Returns:
+        Previous season ranking (1-20), or 0 if team didn't play in previous season
+    """
+    # Parse current season to get previous season
+    season_parts = current_season.split('-')
+
+    start_year = int(season_parts[0])
+    prev_season = f"{start_year - 1}-{str(start_year)[-2:]}"
+
+    # Calculate previous season standings
+    prev_standings = calculate_season_standings(data, prev_season)
+
+    # Return team's ranking, or 0 if not found (newly promoted team)
+    return prev_standings.get(team, 0)
+
+
 def calculate_goal_averages(data: List[dict], team: str, reference_date: str) -> tuple:
     """Calculate average goals scored and conceded in the season up to the reference date.
 
@@ -172,10 +238,6 @@ def calculate_goal_averages(data: List[dict], team: str, reference_date: str) ->
     matches = 0
 
     for match in data:
-        # Skip matches with no date
-        if not match.get('Date') or match['Date'].strip() == '':
-            continue
-
         # Parse match date
         match_date = datetime.strptime(match['Date'], '%d/%m/%Y')
 
@@ -225,13 +287,12 @@ def _process_single_match(args):
     """Helper function to process a single match. Used for parallel processing."""
     match, data = args
 
-    # Skip matches with no date
-    if not match.get('Date') or match['Date'].strip() == '':
-        return match
-
     match_date = match['Date']
     home_team = match['HomeTeam']
     away_team = match['AwayTeam']
+
+    # Get current season
+    current_season = get_season_from_date(match_date)
 
     # Get home team's record before this match
     h_wins, h_draws, h_losses = count_record_in_season(data, home_team, match_date)
@@ -247,6 +308,10 @@ def _process_single_match(args):
     a_goals_scored, a_goals_conceded, a_shots, a_shots_conceded, a_corners, a_corners_concealed, a_fouls = calculate_goal_averages(
         data, away_team, match_date)
 
+    # NEW: Get previous season rankings
+    h_prev_ranking = get_previous_season_ranking(data, home_team, current_season)
+    a_prev_ranking = get_previous_season_ranking(data, away_team, current_season)
+
     # Create enriched match record
     enriched_match = match.copy()
     enriched_match['HomeTeam_Wins'] = h_wins
@@ -259,6 +324,7 @@ def _process_single_match(args):
     enriched_match['HomeTeam_AvgCorners'] = round(h_corners, 2)
     enriched_match['HomeTeam_AvgCornersConceded'] = round(h_corners_concealed, 2)
     enriched_match['HomeTeam_AvgFouls'] = round(h_fouls, 2)
+    enriched_match['HomeTeam_PrevSeasonRank'] = h_prev_ranking
 
     enriched_match['AwayTeam_Wins'] = a_wins
     enriched_match['AwayTeam_Draws'] = a_draws
@@ -270,6 +336,7 @@ def _process_single_match(args):
     enriched_match['AwayTeam_AvgCorners'] = round(a_corners, 2)
     enriched_match['AwayTeam_AvgCornersConceded'] = round(a_corners_concealed, 2)
     enriched_match['AwayTeam_AvgFouls'] = round(a_fouls, 2)
+    enriched_match['AwayTeam_PrevSeasonRank'] = a_prev_ranking
 
     return enriched_match
 
@@ -388,11 +455,13 @@ def prepare_features(data):
         'HomeTeam_AvgShots', 'HomeTeam_AvgShotsConceded',
         'HomeTeam_AvgCorners', 'HomeTeam_AvgCornersConceded',
         'HomeTeam_AvgFouls',
+        'HomeTeam_PrevSeasonRank',
         'AwayTeam_Wins', 'AwayTeam_Draws', 'AwayTeam_Losses',
         'AwayTeam_AvgGoalsScored', 'AwayTeam_AvgGoalsConceded',
         'AwayTeam_AvgShots', 'AwayTeam_AvgShotsConceded',
         'AwayTeam_AvgCorners', 'AwayTeam_AvgCornersConceded',
-        'AwayTeam_AvgFouls'
+        'AwayTeam_AvgFouls',
+        'AwayTeam_PrevSeasonRank'
     ]
 
     # Extract features
