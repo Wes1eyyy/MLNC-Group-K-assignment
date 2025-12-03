@@ -1,6 +1,7 @@
 """
-Script to scrape Premier League team player ages from Transfermarkt
+Script to scrape Premier League team player ages from Transfermarkt for multiple years
 This script fetches total age and average age for each Premier League team
+from 2000 to 2025
 """
 
 import requests
@@ -19,7 +20,11 @@ HEADERS = {
 # Base URL for Transfermarkt
 BASE_URL = "https://www.transfermarkt.com"
 
-# Premier League teams and their Transfermarkt URLs (2023-24 season)
+# Years to scrape (2000-2025)
+YEARS_TO_SCRAPE = list(range(2000, 2026))
+
+# Premier League teams that were in the league during 2000-2025
+# Note: Some teams may not have been in Premier League for all years
 PREMIER_LEAGUE_TEAMS = {
     'Arsenal': '/arsenal-fc/startseite/verein/11',
     'Aston Villa': '/aston-villa/startseite/verein/405',
@@ -32,25 +37,39 @@ PREMIER_LEAGUE_TEAMS = {
     'Everton': '/fc-everton/startseite/verein/29',
     'Fulham': '/fc-fulham/startseite/verein/931',
     'Liverpool': '/fc-liverpool/startseite/verein/31',
+    'Leeds United': '/leeds-united/startseite/verein/399',
+    'Leicester City': '/leicester-city/startseite/verein/1003',
     'Luton Town': '/luton-town-fc/startseite/verein/1031',
     'Manchester City': '/manchester-city/startseite/verein/281',
     'Manchester United': '/manchester-united/startseite/verein/985',
     'Newcastle': '/newcastle-united/startseite/verein/762',
+    'Norwich City': '/norwich-city/startseite/verein/1123',
     'Nottingham Forest': '/nottingham-forest/startseite/verein/703',
     'Sheffield United': '/sheffield-united/startseite/verein/350',
+    'Southampton': '/fc-southampton/startseite/verein/180',
     'Tottenham': '/tottenham-hotspur/startseite/verein/148',
+    'Watford': '/fc-watford/startseite/verein/1010',
+    'West Bromwich': '/west-bromwich-albion/startseite/verein/984',
     'West Ham': '/west-ham-united/startseite/verein/379',
     'Wolverhampton': '/wolverhampton-wanderers/startseite/verein/543'
 }
 
-def get_team_squad_url(team_url):
-    """Convert team home URL to squad URL"""
-    return team_url.replace('/startseite/', '/kader/')
+def get_team_squad_url(team_url, year=None):
+    """Convert team home URL to squad URL with optional year parameter"""
+    if year and year < 2025:
+        # For historical data, add year parameter
+        return team_url.replace('/startseite/', f'/kader/verein/{team_url.split("/")[-1]}/saison_id/{year}')
+    else:
+        # For current season, use standard kader URL
+        return team_url.replace('/startseite/', '/kader/')
 
-def parse_birth_date(date_str):
-    """Parse birth date string and calculate age"""
+def parse_birth_date(date_str, reference_year=None):
+    """Parse birth date string and calculate age for a specific year"""
     if not date_str or date_str == '-':
         return None
+    
+    if not reference_year:
+        reference_year = datetime.now().year
     
     try:
         # Common date formats on Transfermarkt
@@ -65,16 +84,16 @@ def parse_birth_date(date_str):
                 continue
         
         if birth_date:
-            today = datetime.now()
-            age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+            # Calculate age as of the reference year
+            age = reference_year - birth_date.year
+            # For historical data, we use the year-end age
             return age
         else:
             # Try to extract just the year if full date parsing fails
             year_match = re.search(r'(\d{4})', date_str)
             if year_match:
                 birth_year = int(year_match.group(1))
-                current_year = datetime.now().year
-                return current_year - birth_year
+                return reference_year - birth_year
             
     except Exception as e:
         print(f"Error parsing date '{date_str}': {str(e)}")
@@ -96,11 +115,21 @@ def parse_age_directly(age_str):
     
     return None
 
-def scrape_team_player_ages(team_name, team_url):
-    """Scrape player ages for a specific team"""
-    print(f"Scraping player ages for {team_name}...")
+def scrape_team_player_ages(team_name, team_url, year=None):
+    """Scrape player ages for a specific team and year"""
+    year_str = f" ({year})" if year else ""
+    print(f"Scraping player ages for {team_name}{year_str}...")
     
-    squad_url = BASE_URL + get_team_squad_url(team_url)
+    if year and year < 2025:
+        # For historical data, construct URL with year parameter
+        # Extract team slug and ID from URL
+        parts = team_url.strip('/').split('/')
+        team_slug = parts[0]  # e.g., 'arsenal-fc'
+        team_id = parts[-1]   # e.g., '11'
+        squad_url = f"{BASE_URL}/{team_slug}/kader/verein/{team_id}/saison_id/{year}"
+    else:
+        # For current season
+        squad_url = BASE_URL + get_team_squad_url(team_url)
     
     try:
         response = requests.get(squad_url, headers=HEADERS)
@@ -112,7 +141,7 @@ def scrape_team_player_ages(team_name, team_url):
         # Find the squad table
         squad_table = soup.find('table', {'class': 'items'})
         if not squad_table:
-            print(f"Could not find squad table for {team_name}")
+            print(f"Could not find squad table for {team_name}{year_str}")
             return []
         
         # Find all player rows
@@ -145,7 +174,7 @@ def scrape_team_player_ages(team_name, team_url):
                     break
                 
                 # Try to parse as birth date
-                age = parse_birth_date(cell_text)
+                age = parse_birth_date(cell_text, year)
                 if age:
                     break
             
@@ -158,7 +187,7 @@ def scrape_team_player_ages(team_name, team_url):
         return player_ages
         
     except Exception as e:
-        print(f"Error scraping {team_name}: {str(e)}")
+        print(f"Error scraping {team_name}{year_str}: {str(e)}")
         return []
 
 def calculate_age_statistics(player_ages):
@@ -174,47 +203,66 @@ def calculate_age_statistics(player_ages):
     return total_age, average_age, player_count
 
 def main():
-    """Main function to scrape all Premier League teams' player ages"""
-    print("Starting Premier League player age scraping...")
+    """Main function to scrape all Premier League teams' player ages across multiple years"""
+    print("Starting Premier League player age scraping for 2000-2025...")
     
-    all_team_data = []
+    all_data = []
     
-    for team_name, team_url in PREMIER_LEAGUE_TEAMS.items():
-        # Get player ages for this team
-        player_ages = scrape_team_player_ages(team_name, team_url)
+    for year in YEARS_TO_SCRAPE:
+        print(f"\n{'='*50}")
+        print(f"SCRAPING DATA FOR YEAR: {year}")
+        print(f"{'='*50}")
         
-        # Calculate team statistics
-        total_age, avg_age, player_count = calculate_age_statistics(player_ages)
-        
-        team_data = {
-            'team_name': team_name,
-            'total_age_years': total_age,
-            'average_age_years': round(avg_age, 2),
-            'number_of_players': player_count
-        }
-        
-        all_team_data.append(team_data)
-        
-        print(f"{team_name}: Total Age = {total_age} years, Average Age = {avg_age:.2f} years, Players = {player_count}")
-        
-        # Add delay to be respectful to the website
-        time.sleep(2)
+        for team_name, team_url in PREMIER_LEAGUE_TEAMS.items():
+            # Get player ages for this team and year
+            player_ages = scrape_team_player_ages(team_name, team_url, year)
+            
+            # Calculate team statistics
+            total_age, avg_age, player_count = calculate_age_statistics(player_ages)
+            
+            team_data = {
+                'year': year,
+                'team_name': team_name,
+                'total_age_years': total_age,
+                'average_age_years': round(avg_age, 2),
+                'number_of_players': player_count
+            }
+            
+            all_data.append(team_data)
+            
+            print(f"{team_name} ({year}): Total Age = {total_age} years, Average Age = {avg_age:.2f} years, Players = {player_count}")
+            
+            # Add delay to be respectful to the website
+            time.sleep(3)  # Increased delay for multi-year scraping
     
     # Create DataFrame and save to CSV
-    df = pd.DataFrame(all_team_data)
-    df = df.sort_values('average_age_years', ascending=False)
+    df = pd.DataFrame(all_data)
     
     # Create output directory if it doesn't exist
     import os
     output_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data')
     os.makedirs(output_dir, exist_ok=True)
     
-    output_file = os.path.join(output_dir, 'premier_league_team_ages.csv')
+    # Save comprehensive multi-year data
+    output_file = os.path.join(output_dir, 'premier_league_team_ages_2000_2025.csv')
     df.to_csv(output_file, index=False, encoding='utf-8')
     
-    print(f"\nData saved to {output_file}")
-    print(f"\nTeams sorted by average age:")
-    print(df[['team_name', 'average_age_years', 'number_of_players']])
+    print(f"\nMulti-year data saved to {output_file}")
+    
+    # Create summary by year
+    year_summary = df.groupby('year').agg({
+        'total_age_years': 'sum',
+        'average_age_years': 'mean',
+        'number_of_players': 'sum'
+    }).round(2)
+    
+    print(f"\nSummary by year:")
+    print(year_summary)
+    
+    # Save year summary
+    summary_file = os.path.join(output_dir, 'premier_league_ages_yearly_summary.csv')
+    year_summary.to_csv(summary_file, encoding='utf-8')
+    print(f"Yearly summary saved to {summary_file}")
 
 if __name__ == "__main__":
     main()
