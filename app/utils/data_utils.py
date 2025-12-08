@@ -1,10 +1,14 @@
-from typing import List
+from typing import List, Dict, Optional
 import csv
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import numpy as np
 from tqdm import tqdm
+
+# Global cache for team ages and values data
+_team_ages_cache: Optional[Dict] = None
+_team_values_cache: Optional[Dict] = None
 
 
 def load_data(file_path: str) -> List[dict]:
@@ -56,6 +60,108 @@ def save_data(data: List[dict], file_path: str) -> None:
         writer.writerows(data)
 
     print(f"Saved {len(data)} rows to {file_path}")
+
+
+def load_team_ages_and_values(ages_file: str = "../data/premier_league_team_ages_2000_2025.csv",
+                               values_file: str = "../data/premier_league_team_values_2000_2025.csv") -> None:
+    """Load team ages and values data into global cache.
+
+    This function loads the team ages and market values CSV files and caches them
+    in memory for fast lookups during feature engineering.
+
+    Args:
+        ages_file: Path to team ages CSV file
+        values_file: Path to team values CSV file
+    """
+    global _team_ages_cache, _team_values_cache
+
+    # Load ages data
+    print(f"Loading team ages data from {ages_file}...")
+    ages_data = load_data(ages_file)
+    _team_ages_cache = {}
+    for row in ages_data:
+        year = int(row['year'])
+        team = row['team_name']
+        key = (year, team)
+        _team_ages_cache[key] = {
+            'average_age': float(row['average_age_years']),
+            'total_age': float(row['total_age_years']),
+            'num_players': int(row['number_of_players'])
+        }
+    print(f"Loaded {len(_team_ages_cache)} team-year age records")
+
+    # Load values data
+    print(f"Loading team values data from {values_file}...")
+    values_data = load_data(values_file)
+    _team_values_cache = {}
+    for row in values_data:
+        year = int(row['year'])
+        team = row['team_name']
+        key = (year, team)
+        _team_values_cache[key] = {
+            'average_value': float(row['average_market_value_millions']),
+            'total_value': float(row['total_market_value_millions']),
+            'num_players': int(row['number_of_players'])
+        }
+    print(f"Loaded {len(_team_values_cache)} team-year value records")
+
+
+def get_team_age(team: str, match_date: str) -> float:
+    """Get average age for a team based on match date.
+
+    Args:
+        team: Team name
+        match_date: Match date in format 'DD/MM/YYYY'
+
+    Returns:
+        Average age of team, or 0.0 if not found
+    """
+    global _team_ages_cache
+
+    # Lazy load if cache is empty
+    if _team_ages_cache is None:
+        load_team_ages_and_values()
+
+    # Get year from match date
+    date = datetime.strptime(match_date, '%d/%m/%Y')
+    year = date.year
+
+    # Try to find data for this team and year
+    key = (year, team)
+    if key in _team_ages_cache:
+        return _team_ages_cache[key]['average_age']
+
+    # If not found, return 0.0
+    return 0.0
+
+
+def get_team_value(team: str, match_date: str) -> float:
+    """Get average market value for a team based on match date.
+
+    Args:
+        team: Team name
+        match_date: Match date in format 'DD/MM/YYYY'
+
+    Returns:
+        Average market value in millions, or 0.0 if not found
+    """
+    global _team_values_cache
+
+    # Lazy load if cache is empty
+    if _team_values_cache is None:
+        load_team_ages_and_values()
+
+    # Get year from match date
+    date = datetime.strptime(match_date, '%d/%m/%Y')
+    year = date.year
+
+    # Try to find data for this team and year
+    key = (year, team)
+    if key in _team_values_cache:
+        return _team_values_cache[key]['average_value']
+
+    # If not found, return 0.0
+    return 0.0
 
 
 def get_season_from_date(date_str: str) -> str:
@@ -316,6 +422,12 @@ def process_single_match(args):
     h_prev_ranking = get_previous_season_ranking(data, home_team, current_season)
     a_prev_ranking = get_previous_season_ranking(data, away_team, current_season)
 
+    # NEW: Get team ages and market values
+    h_age = get_team_age(home_team, match_date)
+    a_age = get_team_age(away_team, match_date)
+    h_value = get_team_value(home_team, match_date)
+    a_value = get_team_value(away_team, match_date)
+
     # Create enriched match record
     enriched_match = match.copy()
     enriched_match['HomeTeam_Wins'] = h_wins
@@ -329,6 +441,8 @@ def process_single_match(args):
     enriched_match['HomeTeam_AvgCornersConceded'] = round(h_corners_concealed, 2)
     enriched_match['HomeTeam_AvgFouls'] = round(h_fouls, 2)
     enriched_match['HomeTeam_PrevSeasonRank'] = h_prev_ranking
+    enriched_match['HomeTeam_AvgAge'] = round(h_age, 2)
+    enriched_match['HomeTeam_AvgValue'] = round(h_value, 2)
 
     enriched_match['AwayTeam_Wins'] = a_wins
     enriched_match['AwayTeam_Draws'] = a_draws
@@ -341,6 +455,8 @@ def process_single_match(args):
     enriched_match['AwayTeam_AvgCornersConceded'] = round(a_corners_concealed, 2)
     enriched_match['AwayTeam_AvgFouls'] = round(a_fouls, 2)
     enriched_match['AwayTeam_PrevSeasonRank'] = a_prev_ranking
+    enriched_match['AwayTeam_AvgAge'] = round(a_age, 2)
+    enriched_match['AwayTeam_AvgValue'] = round(a_value, 2)
 
     return enriched_match
 
@@ -460,12 +576,16 @@ def prepare_features(data):
         'HomeTeam_AvgCorners', 'HomeTeam_AvgCornersConceded',
         'HomeTeam_AvgFouls',
         'HomeTeam_PrevSeasonRank',
+        'HomeTeam_AvgAge',
+        'HomeTeam_AvgValue',
         'AwayTeam_Wins', 'AwayTeam_Draws', 'AwayTeam_Losses',
         'AwayTeam_AvgGoalsScored', 'AwayTeam_AvgGoalsConceded',
         'AwayTeam_AvgShots', 'AwayTeam_AvgShotsConceded',
         'AwayTeam_AvgCorners', 'AwayTeam_AvgCornersConceded',
         'AwayTeam_AvgFouls',
-        'AwayTeam_PrevSeasonRank'
+        'AwayTeam_PrevSeasonRank',
+        'AwayTeam_AvgAge',
+        'AwayTeam_AvgValue'
     ]
 
     # Extract features
