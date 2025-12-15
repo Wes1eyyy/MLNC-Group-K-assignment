@@ -166,21 +166,21 @@ plt.close()
 print("\nGenerating Figure 4: F1-Score Heatmap...")
 
 f1_data = df[['exp_id', 'f1_H', 'f1_D', 'f1_A']].set_index('exp_id')
-f1_matrix = f1_data.values
+f1_matrix = f1_data.values.T  # Transpose to make horizontal
 
-fig, ax = plt.subplots(figsize=(8, 12))
+fig, ax = plt.subplots(figsize=(12, 5))
 
 im = ax.imshow(f1_matrix, cmap='RdYlGn', aspect='auto', vmin=0, vmax=0.7)
 
-# Set ticks
-ax.set_xticks(range(3))
-ax.set_xticklabels(['Home Win (H)', 'Draw (D)', 'Away Win (A)'], fontsize=10)
-ax.set_yticks(range(len(f1_data)))
-ax.set_yticklabels(f1_data.index, fontsize=9)
+# Set ticks (swapped x and y)
+ax.set_yticks(range(3))
+ax.set_yticklabels(['Home Win (H)', 'Draw (D)', 'Away Win (A)'], fontsize=10)
+ax.set_xticks(range(len(f1_data)))
+ax.set_xticklabels(f1_data.index, fontsize=9, rotation=45, ha='right')
 
-# Add values
-for i in range(len(f1_data)):
-    for j in range(3):
+# Add values (swapped i and j for transposed matrix)
+for i in range(3):
+    for j in range(len(f1_data)):
         text = ax.text(j, i, f'{f1_matrix[i, j]:.3f}',
                       ha="center", va="center", color="black", fontsize=7)
 
