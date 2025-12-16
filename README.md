@@ -8,7 +8,7 @@ The `data/` directory contains all the datasets used in this project. These file
 
 ### Getting Started
 
-**Important**: The data scraping process in `scraping_data.ipynb` can take several hours to complete. To save time, you can use the pre-scraped files located in the `data/` directory. By downloading and placing the `data` folder in your project's root directory, you can skip the scraping and data merging steps and proceed directly to the analysis and modeling parts of the project (e.g., Section 3).
+**Important**: The data scraping process in `scraping_data.ipynb` can take several hours to complete. To save time, you can use the pre-scraped files located in the `data/` directory. By downloading and placing the `data` folder in your project's root directory, you can skip the scraping and data merging steps and proceed directly to the analysis and modeling parts of the project (e.g., Section 2).
 
 ### Purpose of Data Collection
 
