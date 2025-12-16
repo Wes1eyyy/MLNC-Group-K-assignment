@@ -49,8 +49,8 @@ def get_all_feature_names():
     return all_features
 
 
-def select_features_by_config(config):
-    """
+def select_features_by_conig(config):
+    """  
     Select features based on include/exclude groups
 
     Args:
