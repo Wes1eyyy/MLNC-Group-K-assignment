@@ -1,0 +1,677 @@
+year,team_name,total_age_years,average_age_years,number_of_players
+2000,Arsenal,560,24.35,23
+2000,Aston Villa,444,22.2,20
+2000,Bournemouth,680,21.94,31
+2000,Brentford,765,23.18,33
+2000,Brighton,417,26.06,16
+2000,Burnley,775,28.7,27
+2000,Chelsea,554,24.09,23
+2000,Crystal Palace,695,27.8,25
+2000,Everton,479,25.21,19
+2000,Fulham,586,25.48,23
+2000,Liverpool,480,24.0,20
+2000,Leeds United,476,25.05,19
+2000,Leicester City,528,24.0,22
+2000,Luton Town,813,24.64,33
+2000,Manchester City,647,26.96,24
+2000,Manchester United,604,25.17,24
+2000,Newcastle,477,23.85,20
+2000,Norwich City,427,23.72,18
+2000,Nottingham Forest,532,25.33,21
+2000,Sheffield United,787,28.11,28
+2000,Southampton,414,23.0,18
+2000,Tottenham,620,28.18,22
+2000,Watford,849,25.73,33
+2000,West Bromwich,367,24.47,15
+2000,West Ham,905,28.28,32
+2000,Wolverhampton,574,23.92,24
+2001,Arsenal,534,26.7,20
+2001,Aston Villa,274,21.08,13
+2001,Bournemouth,698,22.52,31
+2001,Brentford,631,23.37,27
+2001,Brighton,763,25.43,30
+2001,Burnley,352,25.14,14
+2001,Chelsea,653,27.21,24
+2001,Crystal Palace,570,27.14,21
+2001,Everton,449,23.63,19
+2001,Fulham,590,28.1,21
+2001,Liverpool,446,23.47,19
+2001,Leeds United,383,23.94,16
+2001,Leicester City,574,26.09,22
+2001,Luton Town,357,25.5,14
+2001,Manchester City,737,27.3,27
+2001,Manchester United,521,22.65,23
+2001,Newcastle,503,26.47,19
+2001,Norwich City,299,21.36,14
+2001,Nottingham Forest,498,26.21,19
+2001,Sheffield United,528,25.14,21
+2001,Southampton,521,26.05,20
+2001,Tottenham,492,25.89,19
+2001,Watford,588,25.57,23
+2001,West Bromwich,326,23.29,14
+2001,West Ham,450,23.68,19
+2001,Wolverhampton,423,24.88,17
+2002,Arsenal,571,24.83,23
+2002,Aston Villa,468,24.63,19
+2002,Bournemouth,657,24.33,27
+2002,Brentford,697,23.23,30
+2002,Brighton,941,26.89,35
+2002,Burnley,640,25.6,25
+2002,Chelsea,581,26.41,22
+2002,Crystal Palace,560,26.67,21
+2002,Everton,456,24.0,19
+2002,Fulham,470,26.11,18
+2002,Liverpool,462,25.67,18
+2002,Leeds United,537,26.85,20
+2002,Leicester City,522,24.86,21
+2002,Luton Town,651,26.04,25
+2002,Manchester City,856,29.52,29
+2002,Manchester United,561,26.71,21
+2002,Newcastle,537,25.57,21
+2002,Norwich City,763,25.43,30
+2002,Nottingham Forest,427,25.12,17
+2002,Sheffield United,719,26.63,27
+2002,Southampton,466,24.53,19
+2002,Tottenham,581,26.41,22
+2002,Watford,800,24.24,33
+2002,West Bromwich,392,23.06,17
+2002,West Ham,744,27.56,27
+2002,Wolverhampton,413,22.94,18
+2003,Arsenal,502,27.89,18
+2003,Aston Villa,284,23.67,12
+2003,Bournemouth,262,21.83,12
+2003,Brentford,556,24.17,23
+2003,Brighton,518,25.9,20
+2003,Burnley,356,20.94,17
+2003,Chelsea,490,27.22,18
+2003,Crystal Palace,430,25.29,17
+2003,Everton,393,24.56,16
+2003,Fulham,503,25.15,20
+2003,Liverpool,549,27.45,20
+2003,Leeds United,601,28.62,21
+2003,Leicester City,640,25.6,25
+2003,Luton Town,611,27.77,22
+2003,Manchester City,557,29.32,19
+2003,Manchester United,616,28.0,22
+2003,Newcastle,456,26.82,17
+2003,Norwich City,282,21.69,13
+2003,Nottingham Forest,551,25.05,22
+2003,Sheffield United,638,23.63,27
+2003,Southampton,484,25.47,19
+2003,Tottenham,514,25.7,20
+2003,Watford,427,25.12,17
+2003,West Bromwich,450,26.47,17
+2003,West Ham,686,25.41,27
+2003,Wolverhampton,540,25.71,21
+2004,Arsenal,627,25.08,25
+2004,Aston Villa,223,20.27,11
+2004,Bournemouth,359,21.12,17
+2004,Brentford,630,22.5,28
+2004,Brighton,542,24.64,22
+2004,Burnley,225,22.5,10
+2004,Chelsea,432,27.0,16
+2004,Crystal Palace,513,23.32,22
+2004,Everton,281,23.42,12
+2004,Fulham,507,26.68,19
+2004,Liverpool,578,27.52,21
+2004,Leeds United,744,25.66,29
+2004,Leicester City,465,24.47,19
+2004,Luton Town,466,25.89,18
+2004,Manchester City,686,29.83,23
+2004,Manchester United,601,27.32,22
+2004,Newcastle,469,27.59,17
+2004,Norwich City,327,23.36,14
+2004,Nottingham Forest,793,27.34,29
+2004,Sheffield United,570,24.78,23
+2004,Southampton,723,27.81,26
+2004,Tottenham,506,25.3,20
+2004,Watford,663,27.62,24
+2004,West Bromwich,406,23.88,17
+2004,West Ham,638,25.52,25
+2004,Wolverhampton,504,26.53,19
+2005,Arsenal,638,25.52,25
+2005,Aston Villa,376,23.5,16
+2005,Bournemouth,457,22.85,20
+2005,Brentford,404,21.26,19
+2005,Brighton,481,25.32,19
+2005,Burnley,313,20.87,15
+2005,Chelsea,365,24.33,15
+2005,Crystal Palace,492,25.89,19
+2005,Everton,369,23.06,16
+2005,Fulham,459,24.16,19
+2005,Liverpool,607,25.29,24
+2005,Leeds United,563,25.59,22
+2005,Leicester City,463,24.37,19
+2005,Luton Town,404,25.25,16
+2005,Manchester City,567,29.84,19
+2005,Manchester United,421,26.31,16
+2005,Newcastle,470,24.74,19
+2005,Norwich City,418,23.22,18
+2005,Nottingham Forest,553,27.65,20
+2005,Sheffield United,769,28.48,27
+2005,Southampton,755,26.96,28
+2005,Tottenham,420,24.71,17
+2005,Watford,596,25.91,23
+2005,West Bromwich,371,23.19,16
+2005,West Ham,449,23.63,19
+2005,Wolverhampton,577,26.23,22
+2006,Arsenal,572,24.87,23
+2006,Aston Villa,475,25.0,19
+2006,Bournemouth,745,25.69,29
+2006,Brentford,544,23.65,23
+2006,Brighton,727,25.07,29
+2006,Burnley,244,20.33,12
+2006,Chelsea,461,28.81,16
+2006,Crystal Palace,577,27.48,21
+2006,Everton,764,26.34,29
+2006,Fulham,564,25.64,22
+2006,Liverpool,591,25.7,23
+2006,Leeds United,996,27.67,36
+2006,Leicester City,537,24.41,22
+2006,Luton Town,917,24.78,37
+2006,Manchester City,539,25.67,21
+2006,Manchester United,593,25.78,23
+2006,Newcastle,566,24.61,23
+2006,Norwich City,1000,24.39,41
+2006,Nottingham Forest,533,24.23,22
+2006,Sheffield United,778,26.83,29
+2006,Southampton,391,24.44,16
+2006,Tottenham,565,24.57,23
+2006,Watford,765,27.32,28
+2006,West Bromwich,541,24.59,22
+2006,West Ham,906,25.89,35
+2006,Wolverhampton,771,27.54,28
+2007,Arsenal,537,23.35,23
+2007,Aston Villa,312,22.29,14
+2007,Bournemouth,588,24.5,24
+2007,Brentford,508,21.17,24
+2007,Brighton,458,21.81,21
+2007,Burnley,418,23.22,18
+2007,Chelsea,610,27.73,22
+2007,Crystal Palace,914,27.7,33
+2007,Everton,536,25.52,21
+2007,Fulham,659,26.36,25
+2007,Liverpool,711,27.35,26
+2007,Leeds United,828,28.55,29
+2007,Leicester City,973,27.8,35
+2007,Luton Town,645,26.88,24
+2007,Manchester City,631,25.24,25
+2007,Manchester United,596,24.83,24
+2007,Newcastle,547,27.35,20
+2007,Norwich City,849,25.73,33
+2007,Nottingham Forest,511,26.89,19
+2007,Sheffield United,693,26.65,26
+2007,Southampton,785,26.17,30
+2007,Tottenham,632,26.33,24
+2007,Watford,642,22.93,28
+2007,West Bromwich,500,23.81,21
+2007,West Ham,552,26.29,21
+2007,Wolverhampton,803,27.69,29
+2008,Arsenal,652,27.17,24
+2008,Aston Villa,525,21.88,24
+2008,Bournemouth,462,23.1,20
+2008,Brentford,507,23.05,22
+2008,Brighton,930,25.83,36
+2008,Burnley,342,24.43,14
+2008,Chelsea,557,27.85,20
+2008,Crystal Palace,726,26.89,27
+2008,Everton,459,24.16,19
+2008,Fulham,580,24.17,24
+2008,Liverpool,591,25.7,23
+2008,Leeds United,510,25.5,20
+2008,Leicester City,718,25.64,28
+2008,Luton Town,615,24.6,25
+2008,Manchester City,667,25.65,26
+2008,Manchester United,633,23.44,27
+2008,Newcastle,556,24.17,23
+2008,Norwich City,649,24.04,27
+2008,Nottingham Forest,775,27.68,28
+2008,Sheffield United,837,26.16,32
+2008,Southampton,703,24.24,29
+2008,Tottenham,608,24.32,25
+2008,Watford,860,26.88,32
+2008,West Bromwich,530,24.09,22
+2008,West Ham,676,26.0,26
+2008,Wolverhampton,636,25.44,25
+2009,Arsenal,677,21.84,31
+2009,Aston Villa,358,22.38,16
+2009,Bournemouth,400,25.0,16
+2009,Brentford,614,23.62,26
+2009,Brighton,931,24.5,38
+2009,Burnley,508,26.74,19
+2009,Chelsea,626,28.45,22
+2009,Crystal Palace,499,26.26,19
+2009,Everton,788,29.19,27
+2009,Fulham,716,28.64,25
+2009,Liverpool,591,25.7,23
+2009,Leeds United,694,23.93,29
+2009,Leicester City,527,25.1,21
+2009,Luton Town,717,24.72,29
+2009,Manchester City,658,28.61,23
+2009,Manchester United,592,23.68,25
+2009,Newcastle,782,28.96,27
+2009,Norwich City,784,24.5,32
+2009,Nottingham Forest,524,27.58,19
+2009,Sheffield United,764,26.34,29
+2009,Southampton,573,28.65,20
+2009,Tottenham,665,25.58,26
+2009,Watford,732,27.11,27
+2009,West Bromwich,949,29.66,32
+2009,West Ham,617,25.71,24
+2009,Wolverhampton,625,27.17,23
+2010,Arsenal,402,21.16,19
+2010,Aston Villa,622,27.04,23
+2010,Bournemouth,581,25.26,23
+2010,Brentford,737,27.3,27
+2010,Brighton,573,26.05,22
+2010,Burnley,672,28.0,24
+2010,Chelsea,552,27.6,20
+2010,Crystal Palace,651,26.04,25
+2010,Everton,561,26.71,21
+2010,Fulham,505,25.25,20
+2010,Liverpool,741,29.64,25
+2010,Leeds United,789,27.21,29
+2010,Leicester City,912,26.82,34
+2010,Luton Town,542,25.81,21
+2010,Manchester City,724,30.17,24
+2010,Manchester United,757,29.12,26
+2010,Newcastle,587,24.46,24
+2010,Norwich City,583,26.5,22
+2010,Nottingham Forest,586,27.9,21
+2010,Sheffield United,1043,28.97,36
+2010,Southampton,656,27.33,24
+2010,Tottenham,604,27.45,22
+2010,Watford,615,25.62,24
+2010,West Bromwich,591,25.7,23
+2010,West Ham,708,27.23,26
+2010,Wolverhampton,718,28.72,25
+2011,Arsenal,670,23.1,29
+2011,Aston Villa,667,25.65,26
+2011,Bournemouth,808,27.86,29
+2011,Brentford,645,24.81,26
+2011,Brighton,703,27.04,26
+2011,Burnley,663,28.83,23
+2011,Chelsea,441,24.5,18
+2011,Crystal Palace,972,30.38,32
+2011,Everton,507,25.35,20
+2011,Fulham,529,25.19,21
+2011,Liverpool,500,26.32,19
+2011,Leeds United,569,25.86,22
+2011,Leicester City,578,25.13,23
+2011,Luton Town,539,24.5,22
+2011,Manchester City,577,25.09,23
+2011,Manchester United,580,26.36,22
+2011,Newcastle,545,24.77,22
+2011,Norwich City,319,22.79,14
+2011,Nottingham Forest,568,27.05,21
+2011,Sheffield United,534,25.43,21
+2011,Southampton,667,27.79,24
+2011,Tottenham,809,28.89,28
+2011,Watford,647,24.88,26
+2011,West Bromwich,541,23.52,23
+2011,West Ham,860,28.67,30
+2011,Wolverhampton,590,26.82,22
+2012,Arsenal,617,21.28,29
+2012,Aston Villa,528,25.14,21
+2012,Bournemouth,777,27.75,28
+2012,Brentford,468,24.63,19
+2012,Brighton,527,26.35,20
+2012,Burnley,540,27.0,20
+2012,Chelsea,530,25.24,21
+2012,Crystal Palace,722,27.77,26
+2012,Everton,430,23.89,18
+2012,Fulham,618,24.72,25
+2012,Liverpool,682,23.52,29
+2012,Leeds United,587,25.52,23
+2012,Leicester City,452,25.11,18
+2012,Luton Town,576,24.0,24
+2012,Manchester City,554,29.16,19
+2012,Manchester United,594,22.0,27
+2012,Newcastle,571,22.84,25
+2012,Norwich City,502,23.9,21
+2012,Nottingham Forest,590,26.82,22
+2012,Sheffield United,595,24.79,24
+2012,Southampton,619,23.81,26
+2012,Tottenham,715,24.66,29
+2012,Watford,792,28.29,28
+2012,West Bromwich,435,22.89,19
+2012,West Ham,634,22.64,28
+2012,Wolverhampton,1094,28.79,38
+2013,Arsenal,644,23.0,28
+2013,Aston Villa,517,24.62,21
+2013,Bournemouth,612,24.48,25
+2013,Brentford,805,25.16,32
+2013,Brighton,528,24.0,22
+2013,Burnley,367,24.47,15
+2013,Chelsea,867,24.08,36
+2013,Crystal Palace,745,24.03,31
+2013,Everton,511,22.22,23
+2013,Fulham,895,24.19,37
+2013,Liverpool,548,23.83,23
+2013,Leeds United,660,25.38,26
+2013,Leicester City,501,26.37,19
+2013,Luton Town,623,24.92,25
+2013,Manchester City,356,27.38,13
+2013,Manchester United,575,23.96,24
+2013,Newcastle,555,23.12,24
+2013,Norwich City,436,24.22,18
+2013,Nottingham Forest,675,25.0,27
+2013,Sheffield United,824,24.97,33
+2013,Southampton,551,22.96,24
+2013,Tottenham,663,22.86,29
+2013,Watford,709,22.87,31
+2013,West Bromwich,544,24.73,22
+2013,West Ham,785,22.43,35
+2013,Wolverhampton,633,23.44,27
+2014,Arsenal,595,22.04,27
+2014,Aston Villa,610,24.4,25
+2014,Bournemouth,630,26.25,24
+2014,Brentford,672,24.0,28
+2014,Brighton,736,24.53,30
+2014,Burnley,415,23.06,18
+2014,Chelsea,623,24.92,25
+2014,Crystal Palace,698,25.85,27
+2014,Everton,617,22.04,28
+2014,Fulham,834,26.9,31
+2014,Liverpool,528,24.0,22
+2014,Leeds United,706,27.15,26
+2014,Leicester City,592,24.67,24
+2014,Luton Town,601,23.12,26
+2014,Manchester City,380,27.14,14
+2014,Manchester United,693,24.75,28
+2014,Newcastle,793,25.58,31
+2014,Norwich City,769,24.81,31
+2014,Nottingham Forest,717,23.9,30
+2014,Sheffield United,680,23.45,29
+2014,Southampton,536,22.33,24
+2014,Tottenham,671,23.96,28
+2014,Watford,698,25.85,27
+2014,West Bromwich,478,22.76,21
+2014,West Ham,566,22.64,25
+2014,Wolverhampton,567,24.65,23
+2015,Arsenal,647,24.88,26
+2015,Aston Villa,781,24.41,32
+2015,Bournemouth,770,23.33,33
+2015,Brentford,620,23.85,26
+2015,Brighton,545,24.77,22
+2015,Burnley,515,23.41,22
+2015,Chelsea,632,22.57,28
+2015,Crystal Palace,594,24.75,24
+2015,Everton,572,22.88,25
+2015,Fulham,747,26.68,28
+2015,Liverpool,715,24.66,29
+2015,Leeds United,515,23.41,22
+2015,Leicester City,553,25.14,22
+2015,Luton Town,714,25.5,28
+2015,Manchester City,518,21.58,24
+2015,Manchester United,822,25.69,32
+2015,Newcastle,809,26.97,30
+2015,Norwich City,716,23.87,30
+2015,Nottingham Forest,736,25.38,29
+2015,Sheffield United,916,25.44,36
+2015,Southampton,556,26.48,21
+2015,Tottenham,410,22.78,18
+2015,Watford,626,25.04,25
+2015,West Bromwich,520,22.61,23
+2015,West Ham,966,24.77,39
+2015,Wolverhampton,713,23.77,30
+2016,Arsenal,632,22.57,28
+2016,Aston Villa,788,24.62,32
+2016,Bournemouth,615,22.78,27
+2016,Brentford,544,21.76,25
+2016,Brighton,572,27.24,21
+2016,Burnley,593,23.72,25
+2016,Chelsea,913,24.03,38
+2016,Crystal Palace,820,24.85,33
+2016,Everton,649,24.96,26
+2016,Fulham,568,23.67,24
+2016,Liverpool,503,22.86,22
+2016,Leeds United,632,24.31,26
+2016,Leicester City,421,23.39,18
+2016,Luton Town,643,23.81,27
+2016,Manchester City,366,26.14,14
+2016,Manchester United,635,22.68,28
+2016,Newcastle,791,24.72,32
+2016,Norwich City,647,23.96,27
+2016,Nottingham Forest,936,26.74,35
+2016,Sheffield United,667,21.52,31
+2016,Southampton,531,24.14,22
+2016,Tottenham,570,22.8,25
+2016,Watford,896,25.6,35
+2016,West Bromwich,451,26.53,17
+2016,West Ham,722,24.07,30
+2016,Wolverhampton,701,23.37,30
+2017,Arsenal,542,25.81,21
+2017,Aston Villa,818,24.79,33
+2017,Bournemouth,519,23.59,22
+2017,Brentford,512,23.27,22
+2017,Brighton,493,25.95,19
+2017,Burnley,442,24.56,18
+2017,Chelsea,733,22.91,32
+2017,Crystal Palace,663,24.56,27
+2017,Everton,855,23.75,36
+2017,Fulham,604,25.17,24
+2017,Liverpool,473,23.65,20
+2017,Leeds United,842,24.76,34
+2017,Leicester City,535,24.32,22
+2017,Luton Town,735,25.34,29
+2017,Manchester City,468,24.63,19
+2017,Manchester United,590,26.82,22
+2017,Newcastle,620,25.83,24
+2017,Norwich City,639,24.58,26
+2017,Nottingham Forest,818,28.21,29
+2017,Sheffield United,600,25.0,24
+2017,Southampton,475,26.39,18
+2017,Tottenham,505,22.95,22
+2017,Watford,609,25.38,24
+2017,West Bromwich,435,21.75,20
+2017,West Ham,762,24.58,31
+2017,Wolverhampton,771,23.36,33
+2018,Arsenal,506,25.3,20
+2018,Aston Villa,785,28.04,28
+2018,Bournemouth,493,25.95,19
+2018,Brentford,694,27.76,25
+2018,Brighton,662,26.48,25
+2018,Burnley,485,26.94,18
+2018,Chelsea,922,27.12,34
+2018,Crystal Palace,619,29.48,21
+2018,Everton,683,27.32,25
+2018,Fulham,494,27.44,18
+2018,Liverpool,318,24.46,13
+2018,Leeds United,700,28.0,25
+2018,Leicester City,562,25.55,22
+2018,Luton Town,622,28.27,22
+2018,Manchester City,626,25.04,25
+2018,Manchester United,523,27.53,19
+2018,Newcastle,490,25.79,19
+2018,Norwich City,696,27.84,25
+2018,Nottingham Forest,899,29.97,30
+2018,Sheffield United,537,25.57,21
+2018,Southampton,574,28.7,20
+2018,Tottenham,384,25.6,15
+2018,Watford,615,23.65,26
+2018,West Bromwich,435,25.59,17
+2018,West Ham,547,27.35,20
+2018,Wolverhampton,701,25.96,27
+2019,Arsenal,649,24.04,27
+2019,Aston Villa,646,24.85,26
+2019,Bournemouth,595,24.79,24
+2019,Brentford,497,23.67,21
+2019,Brighton,492,27.33,18
+2019,Burnley,444,22.2,20
+2019,Chelsea,474,22.57,21
+2019,Crystal Palace,474,23.7,20
+2019,Everton,566,24.61,23
+2019,Fulham,562,25.55,22
+2019,Liverpool,785,20.66,38
+2019,Leeds United,566,28.3,20
+2019,Leicester City,426,23.67,18
+2019,Luton Town,567,25.77,22
+2019,Manchester City,468,22.29,21
+2019,Manchester United,752,25.07,30
+2019,Newcastle,618,25.75,24
+2019,Norwich City,571,22.84,25
+2019,Nottingham Forest,812,24.61,33
+2019,Sheffield United,566,24.61,23
+2019,Southampton,698,25.85,27
+2019,Tottenham,640,24.62,26
+2019,Watford,717,23.13,31
+2019,West Bromwich,485,22.05,22
+2019,West Ham,695,23.97,29
+2019,Wolverhampton,809,23.11,35
+2020,Arsenal,648,28.17,23
+2020,Aston Villa,562,28.1,20
+2020,Bournemouth,548,26.1,21
+2020,Brentford,781,27.89,28
+2020,Brighton,632,27.48,23
+2020,Burnley,548,30.44,18
+2020,Chelsea,507,24.14,21
+2020,Crystal Palace,628,29.9,21
+2020,Everton,568,25.82,22
+2020,Fulham,501,25.05,20
+2020,Liverpool,295,22.69,13
+2020,Leeds United,635,28.86,22
+2020,Leicester City,504,28.0,18
+2020,Luton Town,636,25.44,25
+2020,Manchester City,350,25.0,14
+2020,Manchester United,572,27.24,21
+2020,Newcastle,436,25.65,17
+2020,Norwich City,676,27.04,25
+2020,Nottingham Forest,594,27.0,22
+2020,Sheffield United,683,27.32,25
+2020,Southampton,605,30.25,20
+2020,Tottenham,544,28.63,19
+2020,Watford,790,28.21,28
+2020,West Bromwich,671,26.84,25
+2020,West Ham,685,28.54,24
+2020,Wolverhampton,523,26.15,20
+2021,Arsenal,469,26.06,18
+2021,Aston Villa,707,29.46,24
+2021,Bournemouth,738,25.45,29
+2021,Brentford,558,23.25,24
+2021,Brighton,549,26.14,21
+2021,Burnley,475,21.59,22
+2021,Chelsea,679,22.63,30
+2021,Crystal Palace,416,23.11,18
+2021,Everton,524,26.2,20
+2021,Fulham,602,24.08,25
+2021,Liverpool,299,24.92,12
+2021,Leeds United,534,29.67,18
+2021,Leicester City,659,24.41,27
+2021,Luton Town,614,23.62,26
+2021,Manchester City,309,25.75,12
+2021,Manchester United,751,25.9,29
+2021,Newcastle,491,24.55,20
+2021,Norwich City,788,23.18,34
+2021,Nottingham Forest,736,23.0,32
+2021,Sheffield United,820,28.28,29
+2021,Southampton,508,28.22,18
+2021,Tottenham,572,28.6,20
+2021,Watford,833,24.5,34
+2021,West Bromwich,621,23.0,27
+2021,West Ham,427,28.47,15
+2021,Wolverhampton,460,25.56,18
+2022,Arsenal,642,22.14,29
+2022,Aston Villa,759,24.48,31
+2022,Bournemouth,760,23.03,33
+2022,Brentford,559,23.29,24
+2022,Brighton,609,27.68,22
+2022,Burnley,647,23.11,28
+2022,Chelsea,695,23.97,29
+2022,Crystal Palace,634,23.48,27
+2022,Everton,661,24.48,27
+2022,Fulham,777,23.55,33
+2022,Liverpool,367,26.21,14
+2022,Leeds United,788,23.88,33
+2022,Leicester City,617,24.68,25
+2022,Luton Town,837,24.62,34
+2022,Manchester City,496,22.55,22
+2022,Manchester United,766,25.53,30
+2022,Newcastle,656,27.33,24
+2022,Norwich City,637,23.59,27
+2022,Nottingham Forest,902,24.38,37
+2022,Sheffield United,541,22.54,24
+2022,Southampton,769,24.03,32
+2022,Tottenham,604,25.17,24
+2022,Watford,954,24.46,39
+2022,West Bromwich,646,23.93,27
+2022,West Ham,708,22.84,31
+2022,Wolverhampton,679,24.25,28
+2023,Arsenal,619,22.93,27
+2023,Aston Villa,696,27.84,25
+2023,Bournemouth,605,23.27,26
+2023,Brentford,652,24.15,27
+2023,Brighton,760,28.15,27
+2023,Burnley,635,26.46,24
+2023,Chelsea,929,22.66,41
+2023,Crystal Palace,601,24.04,25
+2023,Everton,502,23.9,21
+2023,Fulham,557,24.22,23
+2023,Liverpool,616,22.81,27
+2023,Leeds United,599,24.96,24
+2023,Leicester City,596,24.83,24
+2023,Luton Town,720,23.23,31
+2023,Manchester City,483,21.95,22
+2023,Manchester United,754,25.13,30
+2023,Newcastle,718,23.93,30
+2023,Norwich City,744,24.8,30
+2023,Nottingham Forest,850,26.56,32
+2023,Sheffield United,670,23.1,29
+2023,Southampton,679,23.41,29
+2023,Tottenham,721,25.75,28
+2023,Watford,543,24.68,22
+2023,West Bromwich,737,23.03,32
+2023,West Ham,552,24.0,23
+2023,Wolverhampton,728,22.75,32
+2024,Arsenal,664,22.9,29
+2024,Aston Villa,701,23.37,30
+2024,Bournemouth,649,24.04,27
+2024,Brentford,592,23.68,25
+2024,Brighton,898,23.63,38
+2024,Burnley,1055,25.12,42
+2024,Chelsea,1073,24.39,44
+2024,Crystal Palace,663,25.5,26
+2024,Everton,631,23.37,27
+2024,Fulham,360,24.0,15
+2024,Liverpool,374,20.78,18
+2024,Leeds United,436,24.22,18
+2024,Leicester City,645,24.81,26
+2024,Luton Town,835,26.09,32
+2024,Manchester City,661,23.61,28
+2024,Manchester United,836,23.22,36
+2024,Newcastle,538,24.45,22
+2024,Norwich City,1067,24.81,43
+2024,Nottingham Forest,543,24.68,22
+2024,Sheffield United,754,24.32,31
+2024,Southampton,733,25.28,29
+2024,Tottenham,684,24.43,28
+2024,Watford,705,25.18,28
+2024,West Bromwich,764,22.47,34
+2024,West Ham,435,25.59,17
+2024,Wolverhampton,763,24.61,31
+2025,Arsenal,239,26.56,9
+2025,Aston Villa,287,26.09,11
+2025,Bournemouth,318,26.5,12
+2025,Brentford,444,27.75,16
+2025,Brighton,385,25.67,15
+2025,Burnley,460,27.06,17
+2025,Chelsea,541,30.06,18
+2025,Crystal Palace,376,26.86,14
+2025,Everton,365,28.08,13
+2025,Fulham,306,23.54,13
+2025,Liverpool,289,28.9,10
+2025,Leeds United,329,25.31,13
+2025,Leicester City,369,24.6,15
+2025,Luton Town,455,25.28,18
+2025,Manchester City,299,27.18,11
+2025,Manchester United,347,26.69,13
+2025,Newcastle,452,28.25,16
+2025,Norwich City,459,27.0,17
+2025,Nottingham Forest,409,27.27,15
+2025,Sheffield United,621,28.23,22
+2025,Southampton,372,26.57,14
+2025,Tottenham,482,28.35,17
+2025,Watford,379,27.07,14
+2025,West Bromwich,204,22.67,9
+2025,West Ham,374,26.71,14
+2025,Wolverhampton,310,28.18,11
